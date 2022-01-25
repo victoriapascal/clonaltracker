@@ -1,0 +1,222 @@
+LOCUS       AB242319                5654 bp    DNA     linear   BCT 28-OCT-2006
+DEFINITION  Enterococcus raffinosus vanRD, vanSD, vanYD, vanHD, vanD, vanXD
+            gene for response regulator, histidine protein kinase, D,
+            D-carboxypeptidase, D-lactate dehydrogenase, D-Ala:D-Lactate
+            ligase, D, D-dipeptidase, complete cds, strain: GV5.
+ACCESSION   AB242319
+VERSION     AB242319.1  GI:109240378
+KEYWORDS    .
+SOURCE      Enterococcus raffinosus
+  ORGANISM  Enterococcus raffinosus
+            Bacteria; Firmicutes; Bacilli; Lactobacillales; Enterococcaceae;
+            Enterococcus.
+REFERENCE   1
+  AUTHORS   Tanimoto,K., Nomura,T., Maruyama,H., Tomita,H., Shibata,N.,
+            Arakawa,Y. and Ike,Y.
+  TITLE     First VanD-Type Vancomycin-Resistant Enterococcus raffinosus
+            Isolate
+  JOURNAL   Antimicrob. Agents Chemother. 50 (11), 3966-3967 (2006)
+   PUBMED   17000737
+REFERENCE   2  (bases 1 to 5654)
+  AUTHORS   Tanimoto,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (16-NOV-2005) Koichi Tanimoto, Gunma University Graduate
+            School of Medicine, Department of Bacterial Drug Resistance;
+            3-39-22 Showa-machi, Maebashi, Gunma 371-8511, Japan
+            (E-mail:tanimoto@med.gunma-u.ac.jp, Tel:81-27-220-8087,
+            Fax:81-27-220-8088)
+FEATURES             Location/Qualifiers
+     source          1..5654
+                     /organism="Enterococcus raffinosus"
+                     /mol_type="genomic DNA"
+                     /strain="GV5"
+                     /db_xref="taxon:71452"
+     gene            1..699
+                     /locus_tag="Eraf_vanRD"
+     CDS             1..699
+                     /locus_tag="vanRD"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="response regulator"
+                     /protein_id="BAE96113.1"
+                     /db_xref="GI:109240379"
+                     /translation="MNEKILVVDDEKELADLVEVYLKNDGYTVYKFYNGRDALNCIES
+                     VELDLAILDIMLPDIDGFQICQKIREKFYFPVIMLTAKVEDGDKIMGLSVADDYITKP
+                     FNPLEVVARVKAQLRQYMRYKQPCIKQEAERTEYDIRGMTISKSSHKCILFGKEIQLT
+                     PTEFSILWYLCERQGTVVSTEELFEAVWGERYFDSNNTVMAHIGRLREKMKEPSRNPK
+                     FIKTVWGVGYTIEK"
+     gene            689..1834
+                     /locus_tag="Eraf_vanSD"
+     CDS             689..1834
+                     /locus_tag="vanSD"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="histidine protein kinase"
+                     /protein_id="BAE96114.1"
+                     /db_xref="GI:109240380"
+                     /translation="MKNKNMTSYEDDYLLFKNRLSVKILLMMACSILIISVVYLFVLK
+                     DNFANVVVAILDRFIYHDRDEAVAVYLRTFKAYEIWLFLIAVMGVFFVIFRRYLDSIS
+                     KYFKEINRGIDTLVHEDTNDIALPPELASTERKINSIRHTLTKRKTDAELAEQRKNDL
+                     VMYLAHDLKIPLSSVIGYLNLLRDEKQISEELREKYLSISLDKAERLEELINEFFEIT
+                     RFNLSNITLVYSKINLTMMLEQLGHEFKPMLAGKNLKCEFDIQPDMLLSCDANKLQRV
+                     FDNLLRNAVSYCYENTTIQVNARQAEDHVLIKIINEGDTIPRERLERIFEQFYRLDMS
+                     RSSSTGGAGLGLAIAREIVELHHGQITARSENGITSFEVTLPTVGKS"
+     gene            1958..3025
+                     /locus_tag="Eraf_vanYD"
+     CDS             1958..3025
+                     /locus_tag="vanYD"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="D, D-carboxypeptidase"
+                     /protein_id="BAE96115.1"
+                     /db_xref="GI:109240381"
+                     /translation="MERQNNNENQYGRNRRKDKRKKLFFYRAACAMLGLLIVCVIFGA
+                     VYFLRESKDPVLPSKENTKTGKDYSFLADGQSEDESPISEPAISNRANAIDLNIIAAN
+                     AIVMNKDTDALLYQKNGTDRIAPASTAKMITALTVLEYCSPEEEMRVGAEIEMIHSDS
+                     STAWLMKGDTLTVRQLLIALMLPSGNDAAYTLAVNTGKVIAGDNSLSNQQAIQIFMDK
+                     VNEKARAIGVTDSNFVVPDGYDAEGQYTTAYDLAIIAKACLEDPIISEIVASNTSYEK
+                     WPNGREVTYNNSNELLDPNSPYYRPEVIGLKTGTSSLGGACVVSAAVIDGETYICVVM
+                     GSTKESRFQDSVAILDKIKAQ"
+     gene            3045..4016
+                     /locus_tag="Eraf_vanHD"
+     CDS             3045..4016
+                     /locus_tag="vanHD"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="D-lactate dehydrogenase"
+                     /protein_id="BAE96116.1"
+                     /db_xref="GI:109240382"
+                     /translation="MQEKIDITVFGCERDEAAVFRKLSSEYGVTVSLIEDVVSEHNAK
+                     LADGCQCVSVSHKAELSEQLLLALKHAGVKYISTRSIGFNHIDIQAAGQLGMAVGTVA
+                     YSPGSVADYTVMLMLMLLRGTKSVLRGTQKQNYCLNDCRGKELQDLTVGVLGTGRIGQ
+                     AVMERLEGFGCKVLAYDRTHKAGANYVSFCELLKSSDIVTLHVPLAEDTRHMIGREQL
+                     EMMKREALLINTARGALVDTAALVAALKEQKIGGAALDVLEGEEGIFYHECTQKTIGH
+                     PYLSVLQKMPNVIVTPHTAYHTDRVLVDTVSNTIRNCLNFERSLGNV"
+     gene            4009..5040
+                     /locus_tag="Eraf_vanD"
+     CDS             4009..5040
+                     /locus_tag="vanD"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="D-Ala:D-Lactate ligase"
+                     /protein_id="BAE96117.1"
+                     /db_xref="GI:109240383"
+                     /translation="MYKLKIAVLFGGCSEEHDVSVKSAMEVAANINKEKYQPFYIGIT
+                     KSGAWKLCDKPCRDWENYAGYPAVISPDRRIHGLLIQKDGGYESQPVDVVLPMIHGKF
+                     GEDGTIQGLLELSGIPYVVCDIQSSVICMDKSLAYMVVKNAGIEVPGFRVLQKGDSLE
+                     AETLSYPVFVKPARSGSSFGVNKVCRAEELQAAVTEAGKYDSKILVEEAVSGSEVGCA
+                     ILGNGNDLITGEVDQIELKHGFFKIHQEAQPEKGSENAVIRVPAALPDEVREQIQETA
+                     KKIYRVLGCRGLARIDLFLREDGSIVLNEVNTMPGFTSYSRYPRMMTAAGFTLSEILD
+                     RLIGLSLRR"
+     gene            5046..5654
+                     /locus_tag="Eraf_vanXD"
+     CDS             5046..5654
+                     /locus_tag="vanXD"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="D, D-dipeptidase"
+                     /protein_id="BAE96118.1"
+                     /db_xref="GI:109240384"
+                     /translation="MEKNFVFLDEMLPGIRWDAKYATWDNFTGKPVDGYEVNRIVGTK
+                     ELGAALRKAQKAAEKLGYGLLLWDGYRPQCAVDCFLTWASLPENNLTKKRYYPNIKRN
+                     EMITKGYVASQSSHSRGSAIDLTIFRLDTGMLVPMGGDFDFMDVRSHHAASGLSEEEA
+                     GNRERLRDIMERSGFEAYRYEWWHYVLADEPYPDTYFDFCIA"
+ORIGIN      
+        1 atgaatgaaa aaatcttagt ggttgacgat gaaaaagagt tggccgactt agttgaagtg
+       61 tacctgaaaa acgatggata taccgtttat aaattttata atggcaggga cgcattaaat
+      121 tgcattgaat ccgtggaact ggatttagcc atactggata tcatgctccc ggatattgac
+      181 ggttttcaaa tctgccagaa aatccgggag aagttctact tccctgttat catgctgaca
+      241 gcgaaagtag aagatgggga taaaatcatg gggctgtccg ttgcagatga ttatattacg
+      301 aagccgttta atccgctgga agtggttgcg agggtaaagg cacagctaag gcagtacatg
+      361 cggtacaagc agccctgcat aaagcaggag gctgaacgca cggaatacga tatccggggg
+      421 atgacaatca gcaagagcag ccataagtgt atcttgtttg gaaaggaaat tcaactgaca
+      481 ccaacggaat tttcgatcct ttggtatctg tgcgagcgtc agggaacggt agtttctacg
+      541 gaggaattat tcgaggcagt atggggcgag cggtattttg acagcaataa taccgtgatg
+      601 gcgcatattg ggcgtctcag agagaaaatg aaggaaccgt caagaaaccc gaagttcata
+      661 aaaaccgtgt ggggagttgg atataccatt gaaaaataaa aatatgacca gttatgagga
+      721 tgactattta ctttttaaaa acagactgtc cgttaaaata ctgctgatga tggcgtgctc
+      781 cattctgatt atatcggtgg tttatctgtt cgtcttaaag gataattttg caaatgtggt
+      841 ggtagccata ttggaccgtt tcatttatca tgaccgggat gaagcggtgg ctgtttacct
+      901 gagaaccttt aaggcgtatg agatatggct tttcctgatc gccgtcatgg gtgtgttttt
+      961 cgttattttt cgtcgttatc tggacagcat ctcaaagtat tttaaggaga tcaaccgggg
+     1021 gattgataca ctggtgcatg aagataccaa tgatatcgcc ctgcctccgg aactggcttc
+     1081 gaccgaaagg aaaatcaatt ccatacggca taccctgacg aagcggaaaa cagacgccga
+     1141 gcttgcggaa cagcggaaaa acgaccttgt catgtacctg gctcatgact tgaagatccc
+     1201 gctttcatcg gtcatagggt atttgaacct gttaagggat gagaagcaga tctccgagga
+     1261 actccgggaa aaatatctgt ccatttcact ggataaggcg gaacgtctgg aagagctgat
+     1321 caatgagttt tttgaaatta cgaggtttaa tctttcaaac atcacgcttg tgtacagcaa
+     1381 aatcaatctg acgatgatgc tggaacagct ggggcacgag tttaagccga tgctggccgg
+     1441 gaaaaatctc aaatgtgaat ttgatattca gccggacatg ctgctgtcct gtgatgccaa
+     1501 caagctgcag agagtgtttg ataatctgct gagaaatgcc gtcagctact gttatgagaa
+     1561 caccaccatt caggtgaatg ccaggcaggc ggaagatcat gtgctcatca aaatcataaa
+     1621 cgaaggggat acgattccgc gggaaaggtt agaaagaatc tttgagcagt tttatcgcct
+     1681 tgatatgtcg cgaagctcaa gcaccggcgg agccggtctg ggacttgcga ttgcaaggga
+     1741 gattgtggaa ctgcaccatg gacagatcac tgcccgcagc gaaaacggta tcaccagttt
+     1801 tgaggttaca ttgcccaccg taggaaaatc gtaagaaatt ccgagataaa ccgtgtgtta
+     1861 tccataaaat aatgcgaaaa aataaatcgc tccattttgg tattctttat atcaggggga
+     1921 gcgatttttt tgtatgtgga aaggagttaa gagaaacgtg gaacgtcaaa ataacaatga
+     1981 aaaccagtat ggaaggaatc gcagaaaaga caaaagaaaa aaattgtttt tttacagagc
+     2041 agcatgtgcc atgctcggtc tgctcatagt ctgtgtaatt tttggagctg tgtattttct
+     2101 cagagagagt aaagatccgg ttcttccatc caaagaaaat acaaagacag gcaaggacta
+     2161 ttcatttttg gccgacggtc agagtgagga tgagtctccg atttcggagc cagccatatc
+     2221 caaccgggcg aatgcgattg acctgaacat catagcagca aatgccattg tgatgaataa
+     2281 agacaccgat gcgttattgt atcaaaaaaa cggcacggac agaattgcgc cggccagtac
+     2341 agcaaagatg attacggcgt tgaccgtgct tgaatattgt tctccggagg aggagatgag
+     2401 agtcggtgca gagattgaaa tgatccatag tgattcgtca accgcatggc ttatgaaagg
+     2461 cgataccctg actgtcaggc agctcctgat tgccctgatg cttccgtccg gcaatgatgc
+     2521 agcttatacc cttgcagtca ataccggaaa ggttattgca ggcgataaca gcctgtccaa
+     2581 tcagcaggcc attcagatat tcatggataa ggtaaatgag aaggccaggg caattggtgt
+     2641 tacagactcg aattttgtgg ttccggatgg gtatgatgcc gaggggcagt ataccacggc
+     2701 ctatgatctt gccatcattg caaaggcatg tttggaggat cccattattt cagaaattgt
+     2761 ggcgagcaat acgtcgtatg aaaaatggcc gaacggcagg gaggtcactt acaacaattc
+     2821 caatgagctt cttgatccga acagtcccta ttaccgtccg gaggtcatcg gactgaaaac
+     2881 agggaccagc agccttggcg gcgcctgtgt ggtctctgcg gcagtgattg acggagaaac
+     2941 ctatatttgc gtagtcatgg gctctacgaa agaaagcagg tttcaggaca gcgttgccat
+     3001 tttggataaa atcaaggccc agtgaaatgt taaggaggaa acgaatgcag gaaaaaatag
+     3061 atattacggt ttttgggtgt gagcgggatg aagcggcggt attccgtaaa ctttcatctg
+     3121 agtatggcgt cacagtttcg ctcatcgaag atgtcgtatc agagcacaat gcaaaattag
+     3181 cggacggatg ccagtgtgtc agcgtaagcc ataaggcgga gctgtcggag cagcttctcc
+     3241 ttgcgctgaa acacgcagga gtgaaataca tcagtacccg gagcattgga ttcaaccata
+     3301 ttgatataca ggctgcaggt cagttgggta tggctgttgg cacagtggca tactcaccgg
+     3361 gaagcgtggc cgattatacc gtcatgctga tgctcatgct gctgcgcggc acaaagtcgg
+     3421 ttctacgagg aacccagaag cagaattatt gtctgaatga ctgccgtgga aaagaactgc
+     3481 aggatttgac ggttggcgtc ctgggaaccg gacgaatcgg acaggcagtc atggaacgcc
+     3541 tggagggatt cggctgcaag gtgttggcct atgaccgaac tcacaaagcc ggagcaaatt
+     3601 atgtttcgtt ttgtgaatta ttgaagagca gcgacattgt tacgctgcat gtgcctctgg
+     3661 cagaggatac ccgccatatg attgggcgcg agcagctaga gatgatgaag agggaggcac
+     3721 ttctgatcaa cacggcacgg ggggctttag tggatacggc tgcactggtt gctgcgctga
+     3781 aagaacaaaa aatcggcgga gccgccttag atgtcctgga aggggaagaa ggcatctttt
+     3841 accatgaatg cacacaaaaa acgatagggc atccttacct ctccgttttg cagaaaatgc
+     3901 ccaatgtcat tgttacgccg catacggcct atcatacgga tcgggtactg gtcgataccg
+     3961 tgagcaatac catccgaaat tgtctgaatt ttgaaaggag tcttggaaat gtataagctt
+     4021 aaaattgcag tcctgtttgg aggctgctca gaggaacatg atgtttcagt gaaatctgcg
+     4081 atggaggttg cagcaaatat aaacaaggaa aaataccagc cgttttatat tggaatcaca
+     4141 aaatccggcg catggaaact atgcgataag ccctgccggg actgggagaa ctatgcggga
+     4201 tacccggctg tgatttctcc ggacagaagg atccatggcc tgctgataca aaaggacggc
+     4261 ggatatgaga gccagcctgt agacgtggtg cttccgatga ttcatggaaa atttggcgag
+     4321 gacggaacca tacagggtct gcttgagctg tccggcattc cttatgtggt atgcgacatt
+     4381 caaagttctg taatctgtat ggataagtcg ctcgcttata tggttgtgaa aaatgcggga
+     4441 attgaggtac ctgggtttcg agttctacaa aagggggaca gcctggaagc agagacgctc
+     4501 tcgtatccgg tctttgtaaa gcctgcccgt tccggctcct cttttggcgt gaataaggta
+     4561 tgccgggcag aggaactgca ggcagcggtc acagaggcgg gtaagtatga cagcaaaata
+     4621 ttggttgagg aggccgtttc cgggagtgag gtaggatgtg ccatactggg aaacggaaac
+     4681 gatctcatca ccggcgaggt cgatcagatt gaattgaaac acgggttttt taagatccat
+     4741 caggaagcac agccggaaaa ggggtctgaa aatgctgtga ttagagttcc agccgccctg
+     4801 ccggatgaag ttagggagca gattcaggaa acggcgaaga agatttaccg ggtacttggc
+     4861 tgcagaggtc tggcccgcat tgatttgttt ttacgggagg atggaagcat tgtcctgaat
+     4921 gaagtgaaca ccatgcctgg atttacttcc tatagccgtt atccacgcat gatgacagca
+     4981 gcagggttta cgctttctga aatattggac cgcttgattg gactttcact taggaggtaa
+     5041 ccatcatgga aaagaacttt gtctttttgg atgaaatgct gccgggcatc cggtgggatg
+     5101 ccaaatatgc cacatgggac aatttcaccg ggaaaccggt agacggatac gaggtaaacc
+     5161 gcattgtggg aacgaaagag cttggtgccg ctttacgtaa ggcacagaag gcggcggaga
+     5221 aactgggata cggtctgctc ttatgggacg gctaccgtcc ccagtgtgca gtggactgct
+     5281 ttttgacttg ggcttccctg ccggagaaca atctgacgaa aaagcgttac tacccaaata
+     5341 tcaaaaggaa cgagatgatc acgaaagggt atgtggcttc tcagtccagc cacagtcgcg
+     5401 ggagcgcgat tgatctcacg atttttcgtt tggacacggg tatgcttgtg ccaatgggcg
+     5461 gagatttcga ctttatggat gtacggtcgc atcatgccgc cagtggtctg agcgaagagg
+     5521 aggccggaaa ccgtgagcgc ctgcgtgata tcatggagcg cagcggattt gaagcctacc
+     5581 gatatgaatg gtggcattat gtcttggcag acgagccata cccggataca tattttgatt
+     5641 tttgcattgc ctag
+//
+
+

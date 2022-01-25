@@ -1,0 +1,317 @@
+LOCUS       EU250284                8295 bp    DNA     linear   BCT 27-JUN-2008
+DEFINITION  Enterococcus faecalis strain N06-0364 vancomycin resistance operon
+            and insertion sequence ISEnfa364, complete sequence.
+ACCESSION   EU250284
+VERSION     EU250284.1  GI:160947039
+KEYWORDS    .
+SOURCE      Enterococcus faecalis
+  ORGANISM  Enterococcus faecalis
+            Bacteria; Firmicutes; Bacilli; Lactobacillales; Enterococcaceae;
+            Enterococcus.
+REFERENCE   1  (bases 1 to 8295)
+  AUTHORS   Boyd,D.A., Willey,B.M., Fawcett,D., Gillani,N. and Mulvey,M.R.
+  TITLE     Molecular characterization of Enterococcus faecalis N06-0364 with
+            low-level vancomycin resistance harboring a novel D-Ala-D-Ser gene
+            cluster, vanL
+  JOURNAL   Antimicrob. Agents Chemother. 52 (7), 2667-2672 (2008)
+   PUBMED   18458129
+REFERENCE   2  (bases 1 to 8295)
+  AUTHORS   Boyd,D.A., Fawcett,D., Gillani,N., Willey,B.M. and Mulvey,M.R.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (26-OCT-2007) 1015 Arlington Street, Winnipeg, MB R3E
+            3R2, Canada
+FEATURES             Location/Qualifiers
+     source          1..8295
+                     /organism="Enterococcus faecalis"
+                     /mol_type="genomic DNA"
+                     /strain="N06-0364"
+                     /db_xref="taxon:1351"
+     operon          955..6510
+                     /operon="vancomycin resistance"
+     gene            955..2004
+                     /locus_tag="Efs_vanL"
+                     /operon="vancomycin resistance"
+     CDS             955..2004
+                     /locus_tag="vanL"
+                     /operon="vancomycin resistance"
+                     /note="VanL"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="D-alanine-D-serine ligase"
+                     /protein_id="ABX54687.1"
+                     /db_xref="GI:160947040"
+                     /translation="MMKLKKIAIIFGGQSSEYEVSLKSTVSVLETLSTCNFEIIKIGI
+                     DLGGKWYLTTSNNKDIEYDVWQTDPSLQEIIPCFNNRGFYNKTTNKYFRPDVLFPILH
+                     GGTGEDGTLQGVFELMNIPYVGCGVTPSAICMDKYLLHEFAQSVGVKSAPTLIIRTRN
+                     CKDEIDKFIEKNDFPIFVKPNEAGSSKGINKVNEPDKLEDALTEAFKYSKSVIIQKAI
+                     IGREIGCAVLGNEKLLVGECDEVSLNSDFFDYTEKYQMISAKVNIPASISVEFSNEMK
+                     KQAQLLYRLLGCSGLARIDFFLSDNNEILLNEINTLPGFTEHSRYPKMMEAVGVTYKE
+                     IITKLINLAEEKYYG"
+     gene            1997..2578
+                     /locus_tag="Efs_vanXYL"
+                     /operon="vancomycin resistance"
+     CDS             1997..2578
+                     /locus_tag="vanXYL"
+                     /operon="vancomycin resistance"
+                     /note="VanXYL"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="D,D-carboxypeptidase/D,D-dipeptidase"
+                     /protein_id="ABX54688.1"
+                     /db_xref="GI:160947041"
+                     /translation="MDNDYKYYLQLVNKQYPWQINNGSKKMVRVPYTDKEIYLDAVVV
+                     EHLIQLIETIQLQEKIEIVDGYRTIDEQKELWEFSLKDRGKRYTHDYVAYPGCSEHHT
+                     GLALDIGLKKTAHDIIAPKFNGEEAKKFLEHMKDYGFILRYPPNKKKVTGIAYEPWHF
+                     RYVGVPHSQIITQQAWTLEEYIAFLHTVGEKVS"
+     gene            2575..3564
+                     /locus_tag="Efs_vanTmL"
+                     /operon="vancomycin resistance"
+     CDS             2575..3564
+                     /locus_tag="vanTmL"
+                     /operon="vancomycin resistance"
+                     /note="VanTmL; contains membrane-binding domain"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="serine racemase"
+                     /protein_id="ABX54689.1"
+                     /db_xref="GI:160947042"
+                     /translation="MKKQNTGVNNFRLIAAAMVVAIHCFPFQTISKELDTLVTLTVFR
+                     IAVPFFFMVSGYYLLGPIPSSATNTYQINNYIKKQLKVYTFAIVLYLPLAFYSQSITL
+                     DMSIISFIKQLLFNGFFYHLWFFPAWVLGLLIVQFLLKRMNIQTVLFITFVAYLIGLG
+                     GDSWWGIVKQVPFFFRFYNAIFQLFGYTRNGLFYAPLFFALGAYLYKMNIKNFNSARN
+                     NYLLLLFSIEMILESYFLHLFNIPKHDSMYLFLPFVMTLVFIKIYNWSPKNNLLNSSQ
+                     LSLGVYLIHPYIIAVIHSISIYVSIFTNSIINYLSVLLISYLTIRLILKRKEW"
+     gene            3558..4658
+                     /locus_tag="Efs_vanTrL"
+                     /operon="vancomycin resistance"
+     CDS             3558..4658
+                     /locus_tag="vanTrL"
+                     /operon="vancomycin resistance"
+                     /note="VanTrL; contains racemase domain"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="serine racemase"
+                     /protein_id="ABX54690.1"
+                     /db_xref="GI:160947043"
+                     /translation="MVENKMRAYKEFYVESLLHNVQVIKKNIPKSTKIMAVVKANAYG
+                     INAVNVAIILEYIGIDFFAVATIDEAIALRKNGITSNILILGYTTPTKVDDLIHYELT
+                     QTIVSKEHAYFLNKTGKKIMCHLKVDTGMHRLGVEPTLEEICPIFNYPFLKIKGVYSH
+                     LGSADDLSEEGKQRTIKQISRYNTIIAELKRKRVDVGLTHLQSSYGILNYSELAYDYV
+                     RPGIILYGLLSNNDHNVKLHLDLQPVVAVKAQLISKKKIAPGEYIGYGTDTQLTSSKT
+                     IGVLSIGYADGIPRNLSNGEYCVVFEDKQIPQIGRICMDMMLVDLSNCSDIPLGVMVD
+                     VLPNIEEISQIQSTITNEIISCLGSRLGMEVK"
+     gene            4731..5426
+                     /locus_tag="Efs_vanRL"
+                     /operon="vancomycin resistance"
+     CDS             4731..5426
+                     /locus_tag="vanRL"
+                     /operon="vancomycin resistance"
+                     /note="VanRL"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="response regulator"
+                     /protein_id="ABX54691.1"
+                     /db_xref="GI:160947044"
+                     /translation="MTDRIVVVDDEQEIANLITTFLENEGFQVTTFYKGEDFLTYIAR
+                     ESISLAILDVMLPDIDGFRILQEIRKNFYFPVLMLTAKEENMDKIMGLTLGADDYITK
+                     PFNPIEVVARVKTQLRRVQKYNRKVENESVIEFNKDGLTLKKDSHQVFLFDKEITVTP
+                     IEFNLLLYLFEHQGVVVSSEELFEAVWKEKYLENNNTIMAHIARLREKLDEQPRKPKF
+                     IKTVWGVGYIIEK"
+     gene            5416..6510
+                     /locus_tag="Efs_vanSL"
+                     /operon="vancomycin resistance"
+     CDS             5416..6510
+                     /locus_tag="vanSL"
+                     /operon="vancomycin resistance"
+                     /note="VanSL"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="sensor histidine kinase"
+                     /protein_id="ABX54692.1"
+                     /db_xref="GI:160947045"
+                     /translation="MKSKAETTTIKQILIKYLVTIGLSMLAYLVFLLTILIIMRNFVW
+                     DGTEPIYRVLHFFYRLFNFEGILIIGVILILFVVTLFFVMKIIGYLKQIIEATKQLLE
+                     KPEQRVKLSSGLFELQEEMNQLREKNNADNRAAKEAEKRKNDLIVYLAHDLRTPLTSV
+                     IGYLTLLKEEPEISVQTRAKYTNIALSKAFRLEELLSEFFDVTRFNLTNLTINEELVD
+                     LSVMLEQISYEFLPILEEKKLSWNLHVESNIKSLLDPGKMERVFDNLMRNAINYSFED
+                     TIIDLSLEKKESQAIFKITNRTYTIPKEKLEKIFEPFYRMDTSRSSSTGGTGLGLPIV
+                     REIIEASKGTINVSSSNNEMTFIIYLPYID"
+     repeat_region   6620..6680
+                     /rpt_type=inverted
+     mobile_element  6684..7738
+                     /mobile_element_type="insertion sequence:ISEnfa364"
+     repeat_region   6684..6706
+                     /rpt_type=inverted
+     gene            6776..7542
+                     /locus_tag="Efs_tnpA-ab"
+     CDS             join(6776..6970,6967..7542)
+                     /locus_tag="tnpA-ab"
+                     /ribosomal_slippage
+                     /note="TnpA-ab"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="truncated transposase"
+                     /protein_id="ABX54694.1"
+                     /db_xref="GI:160947047"
+                     /translation="MTLYIHLTTQEREMIFLYHSFGFSFRRIGRLIKRSPLTVMREIK
+                     RHSTKIKPYSPSLAQKSYHKNKQKCGRKRVLDTSPLKETVCKLFLEDQWSPEQIANRI
+                     KMEKYATISCNAIYRSIYRGLLNKGFTTDSRGACRKLRLKRLEDGRGKFNDAPTIHEH
+                     PLEAENRKTLGHWEADTVIGVKGSACLVTLVDRKSRFLLTSKAALSVSNVIINLFSEL
+                     PLGKRRTITPDRRSEFALYQKFSEATNINCYFSDSQAP"
+     gene            6776..6997
+                     /locus_tag="Efs_tnpA-a"
+     CDS             6776..6997
+                     /locus_tag="tnpA-a"
+                     /note="TnpA-a"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="truncated transposase"
+                     /protein_id="ABX54693.1"
+                     /db_xref="GI:160947046"
+                     /translation="MTLYIHLTTQEREMIFLYHSFGFSFRRIGRLIKRSPLTVMREIK
+                     RHSTKIKPYSPSLAQKSYHKNKNVVENVS"
+     repeat_region   7714..7738
+                     /rpt_type=inverted
+ORIGIN      
+        1 atcgagtttg gagttctgat aaaataataa ttttatcttt tttagacaat tttgttatac
+       61 ctttggacac tctccaatta tctaagtcag tgaaagtaaa ttgggtatag cttttttctt
+      121 taataaattg ttggatttct ttttcataca tgataatacc tcctaattat tttttaaagc
+      181 tattataacg tatttgacta cctacttagt ctcaaatgtg gtgtaaaaat catatgttat
+      241 tgattcctga tttttaaaaa agaaaagtat agtaatgaca tacaaaaaga taaaactgta
+      301 atatgtaaac tatattttgt ggtcttttct atagacttta ttgaaggagg gaagttttgc
+      361 aaaatgtttt tgtgggaatt agatgtaaag gaatttatta ctgagttgat agaacataaa
+      421 agtgatagta cacgacccct gaaattgcaa aaaagtagcc ataccagaac ttgtttgtat
+      481 attgtttatc aatattattc aactgaagcg aaaaaattgt atctaatttg acgtcacata
+      541 attttgtgca atataaagaa gagctacttt tattagacgc taaattaagt acgatattat
+      601 tgtatttact atatgagggc gatcagcatg atttcaataa aatttatgaa gatatacaaa
+      661 ctaatgcaat aaaaaattat gtcacaattc ttaaaacgaa cgcttttagt gatcttttat
+      721 tctcaaaatg gctacttgta caacctgatc agtttaaaac gttagaatac atcgcaaatg
+      781 aacatcttca taactaaaat acagctcgtc tatagttaga cgagctgtat tttagtaact
+      841 gcatcaaaat atcataagtt tgccataaat agtcgagaaa attgtcagta atgcaaaaga
+      901 gaaaacgcat tttttttgaa acctttcagc ttaaaataaa gaaaaagaaa aggaatgatg
+      961 aaattgaaaa agatagccat aatattcgga ggtcaatctt cggaatatga agtctcactt
+     1021 aaatcaacag taagtgtact agaaactcta tcaacttgta attttgaaat tataaaaata
+     1081 ggaattgatt taggcggaaa gtggtatctc accacaagca acaacaaaga tattgaatat
+     1141 gatgtttggc aaactgatcc ttcattacaa gaaataatcc catgtttcaa taatcgaggc
+     1201 ttttataaca aaactacaaa taaatatttc agaccagatg tactctttcc aattcttcat
+     1261 ggggggactg gagaagatgg aaccctccaa ggtgtatttg aattaatgaa tattccttac
+     1321 gttggatgtg gggtgacgcc ttcggctatt tgtatggaca aatacttatt gcatgagttt
+     1381 gctcagagtg tgggtgtaaa aagtgcccct acgctcataa ttcgcactag aaactgcaaa
+     1441 gatgaaattg acaagttcat agaaaaaaat gacttcccta tttttgtaaa gcctaacgaa
+     1501 gcgggctcat caaaaggaat aaacaaagta aatgagccag ataagctaga ggatgcttta
+     1561 acagaagcgt ttaagtatag taaaagtgtt atcattcaga aagctataat tggaagagaa
+     1621 attggctgtg ctgtcttagg taatgaaaaa ctcctagtag gagaatgtga tgaagtttcc
+     1681 cttaatagcg atttttttga ttataccgag aaataccaaa tgatctcagc aaaggtaaat
+     1741 atacctgctt ctatatctgt agaattttct aatgaaatga agaaacaagc tcagctgtta
+     1801 tataggttac taggctgttc aggactagca cgaattgatt tcttcttatc agataataac
+     1861 gaaatactat taaacgaaat taatactttg cctggtttta ctgagcattc cagatatccc
+     1921 aaaatgatgg aagctgtagg tgttacctat aaagagatta tcacgaagtt aatcaattta
+     1981 gcggaggaaa aatattatgg ataacgatta caagtattat ttacaattag tcaataagca
+     2041 atatccttgg cagataaaca atggttctaa aaaaatggta agggtgcctt atacagataa
+     2101 agaaatttat ttagatgcag ttgttgttga acatttgatt cagttgatcg aaactattca
+     2161 attacaagag aaaatagaaa tagttgatgg ttaccgtacg atagacgaac aaaaagaatt
+     2221 atgggaattt tctttaaaag atagagggaa acgatatact catgattatg ttgcctatcc
+     2281 tgggtgtagt gagcatcata ctggacttgc attagatatt ggtcttaaaa aaacagcaca
+     2341 tgatatcata gcaccaaaat ttaatggaga agaggcaaaa aaatttttag agcatatgaa
+     2401 agattacgga tttattttaa ggtaccctcc aaacaaaaaa aaggtaacag ggattgcgta
+     2461 tgaaccgtgg cattttaggt atgttggagt tcctcacagc caaatcatta ctcagcaagc
+     2521 ttggacgctg gaagaatata tcgctttttt acacacagta ggagaaaaag tttcatgaaa
+     2581 aaacaaaata cgggtgtaaa taatttccgt ttaatcgctg ctgccatggt agtagcgatt
+     2641 cattgctttc catttcaaac aatcagtaaa gaactagata cattggttac gctaactgtc
+     2701 tttcgtattg ccgttccttt tttcttcatg gtttctgggt actacctact aggtccaatt
+     2761 ccaagttcag ccacaaatac ttatcaaatt aataactata taaagaaaca gcttaaagtt
+     2821 tatactttcg ctatagttct gtatctacct ttagcgtttt atagtcaatc tatcactttg
+     2881 gatatgtcaa ttattagttt tataaaacaa ctacttttta acggtttttt ttaccatctt
+     2941 tggtttttcc ctgcatgggt attaggatta ttaattgttc aatttttatt aaaaagaatg
+     3001 aatatacaga ctgtattgtt tataacattt gtggcttatt taataggact aggaggggat
+     3061 agttggtggg gaatagttaa acaagttccc ttttttttca gattttacaa tgctatattt
+     3121 caattatttg gttatacacg aaatggtcta ttttatgcgc cgttattctt tgcactggga
+     3181 gcatatctat acaagatgaa tattaaaaac tttaattccg caagaaataa ctatctttta
+     3241 ctgcttttta gtatagaaat gattttagaa agttatttct tacatctctt taacattcct
+     3301 aaacatgaca gtatgtattt gtttttaccg tttgtaatga ctttggtgtt tatcaaaata
+     3361 tacaattggt caccaaaaaa taatttattg aacagctctc agctatctct aggagtatat
+     3421 cttatacatc catatatcat cgcagtaatt cactctatct caatttacgt ttctattttt
+     3481 actaatagca taattaatta tttaagtgtg ctattgataa gttacctaac tataagacta
+     3541 atactaaaaa ggaaggaatg gtagaaaaca aaatgagagc ctacaaagaa ttctatgtag
+     3601 aatcattgtt gcataatgta caagttatca aaaaaaacat acccaagtct actaaaataa
+     3661 tggcagtagt gaaagcaaat gcctatggaa taaatgcagt gaatgtagct attatcttag
+     3721 aatatatagg aattgacttt tttgcagttg ctactataga tgaagctatt gctttaagaa
+     3781 aaaatggcat tacaagtaat attttaattt taggatacac tacaccaacc aaggtagatg
+     3841 atcttatcca ttacgaactt acccaaacaa tagtaagcaa agaacacgcg tattttctta
+     3901 ataaaacagg aaagaagata atgtgtcatt taaaagtcga cacagggatg catcggttag
+     3961 gtgttgaacc tacgttagaa gaaatctgtc ctatttttaa ctaccctttt ttaaagataa
+     4021 agggtgttta ttctcacttg ggctcagcag acgatttatc tgaggaaggc aaacaacgaa
+     4081 ctataaaaca aattagccga tacaatacca ttattgcaga attaaaacga aaacgtgttg
+     4141 acgtagggct aacccatctc caaagtagtt atggtatact taattattct gagttagcgt
+     4201 atgactatgt tcgtcctgga attattttat atgggctttt aagtaataat gaccacaacg
+     4261 tcaaattgca tttggatctc cagcctgtag tagcggttaa agctcagtta atttcaaaaa
+     4321 aaaagatagc tcctggtgaa tatattggct acggtacaga tacacaatta acttcttcca
+     4381 aaactatagg ggtattaagc attgggtatg ctgacggaat ccctagaaat ttatcaaatg
+     4441 gagaatattg tgtcgtgttt gaagataagc aaatccctca aattggacgt atttgtatgg
+     4501 acatgatgtt agtagatttg tcaaattgtt cagatatccc tttaggtgta atggttgatg
+     4561 tattacctaa tattgaagaa atatctcaaa tccaaagcac cataacgaat gaaataataa
+     4621 gttgtttggg tagtcgcttg gggatggaag taaagtaaaa ccagataaaa agctctccta
+     4681 tgaaatttat gctacaatag atacaataaa aattaacgag gagtggcata atgacggata
+     4741 gaatagttgt tgtggatgat gaacaagaga tagccaattt gattacaact tttttagaaa
+     4801 atgaagggtt tcaagtaaca accttttata aaggagaaga ttttttgact tatatagcta
+     4861 gagagtcaat ttctttagct atattagatg tcatgctacc tgatattgat gggtttcgaa
+     4921 tcttgcaaga aattagaaag aatttttatt ttccggtatt aatgcttaca gctaaggaag
+     4981 aaaatatgga caagattatg ggactaacct tgggagcgga tgattatatt actaaaccat
+     5041 ttaacccaat agaagtagtt gcccgggtaa aaacacaact aagacgagtc caaaagtata
+     5101 accggaaagt ggaaaatgaa tcagtcatag agtttaacaa agacggacta acgctaaaaa
+     5161 aagacagtca tcaagtattt ttatttgata aagaaataac tgtaacacct attgaattca
+     5221 atttgctttt atatttattt gaacaccaag gagtggttgt tagttcagaa gaactatttg
+     5281 aagctgtttg gaaagagaaa tatttagaaa ataataacac aatcatggca cacattgctc
+     5341 gcttaaggga aaaattagac gaacagccac gcaaacctaa attcataaaa accgtatggg
+     5401 gggtaggata tattattgaa aagtaaggcg gaaactacaa ctataaaaca gatactaata
+     5461 aaatatttag taactatagg tttatcgatg cttgcctatt tagtatttct tctaacaata
+     5521 cttattataa tgagaaattt tgtatgggac ggcacggagc ctatctatcg tgtcttgcac
+     5581 tttttttatc gtctttttaa ttttgaaggg atattgatta tcggtgtgat acttatccta
+     5641 ttcgttgtta cattgttttt tgttatgaag ataattggct atttaaaaca aatcatcgag
+     5701 gcgacgaaac aattgcttga aaaaccagaa cagcgtgtta agctatcaag tggcctgttc
+     5761 gaattacaag aagaaatgaa ccaactacgt gaaaaaaata atgctgacaa tcgcgcagct
+     5821 aaagaagcgg aaaagagaaa aaacgatttg attgtttatt tagctcatga tttacgtacg
+     5881 ccattaacta gcgtaattgg gtatttaacg ctgttaaaag aagaaccgga aatatcggtt
+     5941 caaactagag ctaagtatac gaacatcgct ttgagtaaag cttttcgcct tgaagaatta
+     6001 ttgagtgaat tttttgatgt gacgagattt aatttgacta acttaacaat aaatgaagaa
+     6061 ctagtagatt taagtgtgat gttagagcaa atcagctacg aatttttacc tattttggaa
+     6121 gaaaaaaaac tttcttggaa tctacacgtc gagagtaata taaaatctct tttagatcca
+     6181 ggaaaaatgg aacgtgtttt tgataacttg atgcgaaatg ctattaatta tagctttgaa
+     6241 gatacaataa ttgatttaag tttagaaaaa aaagaatctc aagctatttt taaaattaca
+     6301 aataggacct atacaatccc aaaagaaaaa ttagaaaaaa tattcgaacc gttttaccga
+     6361 atggacacat ctagaagtag cagtacaggt ggaactgggc ttggtctacc gattgtaagg
+     6421 gaaattattg aagcttccaa aggaactata aacgttagta gtagcaataa tgaaatgact
+     6481 tttataatct atttaccata catagattaa gcgtagccaa agtgattttt cagtacccac
+     6541 tctaattaga aaaaaatgct ggttatttga tattgcttat tgttgataaa cataaaaaaa
+     6601 ttacagctat tacttatttt acaaaaaaga acagatgctt taatttgggg tttcccgaaa
+     6661 agtgtttgtt cttttttgta tgacggattt acaatttaag tgcaacacaa aaatcataga
+     6721 taaaattctt gtataatggt gcggactaac aaatgcctta ggaggaattt tatctatgac
+     6781 tttatatatt catcttacta cccaagagcg agaaatgata tttttatatc atagtttcgg
+     6841 gttttctttc agaagaatag gtcggttaat aaaacggtcg cccttaacag ttatgaggga
+     6901 aattaaacga cattccacaa aaataaaacc gtattctcct tctttagcgc agaaatctta
+     6961 tcataaaaac aaaaatgtgg tagaaaacgt gtcttagata cttctccact taaagaaacg
+     7021 gtttgtaaac ttttcctaga agaccaatgg tctcctgaac aaatagcgaa tagaattaaa
+     7081 atggaaaagt atgcaacgat tagctgcaac gctatttacc gttccattta tcgtggtttg
+     7141 ttaaataaag gattcactac agacagtcgt ggtgcttgta gaaaacttag actcaaacga
+     7201 ttagaggacg gtcgtgggaa attcaatgat gctcctacaa tacatgagca tccacttgaa
+     7261 gctgagaaca gaaagacctt aggtcattgg gaagccgaca cagttattgg tgtgaaagga
+     7321 agtgcctgtt tagttacgct agttgatcgt aaatctagat ttctattaac ttctaaagct
+     7381 gctttatctg tttcgaacgt tatcattaat ctattttctg agttgccttt gggtaaaaga
+     7441 agaacgataa ctcctgacag aagaagtgaa tttgctttat atcagaagtt cagtgaagct
+     7501 actaatatta attgttattt ttctgattca caggctcctt agcaacgagg aaccaatgaa
+     7561 aatacgaatg gactattacg agagtacctg tcaaaaggga aagatatgac cctaattccc
+     7621 gatagttata ttcaatcatt cgtgcataaa ttaaacacta gaccacgaaa atacttaaac
+     7681 tggaaaacac cgtatgaagt tttttacgac aaagtgttgc acttaatttg acaattcgag
+     7741 atgactaaaa agaaattaca actactatcc tcgtgtcaag tacgcgatgc aggtctctct
+     7801 tgtttcggat aatatttatg taacatttta taaaaggatc tcaaaaaaag tatgtaaaga
+     7861 aggccttttt gagatttacg tcatataaaa atataagaaa ataattttga gtaaatgtcc
+     7921 tttacaaggt atatcaattg tcataaacat agattgtaga aatttataat gtatagaatg
+     7981 ttttactacc ataacattct aaataggata attactcttg ttaaccataa tttgtgaaaa
+     8041 aaacacaact aagttttata aatttttttt cttcattagt aagccaaatt tgtctatttt
+     8101 agttgtaagc taaaaatttt ctcactttct aagaaacaac atgaaaatat tataattata
+     8161 aatttgaaaa actaaacttt aggttcatag agaaaaacaa attagctcaa ttagatgttt
+     8221 gaaacgggta aggagggcga caaaatgatc gatatatatt tagtggaaag taattcatta
+     8281 catgcaattt catct
+//
+
+

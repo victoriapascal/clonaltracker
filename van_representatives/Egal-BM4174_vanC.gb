@@ -1,0 +1,286 @@
+LOCUS       AF162694                6963 bp    DNA     linear   BCT 20-JUL-2000
+DEFINITION  Enterococcus gallinarum vanC vancomycin-resistance gene cluster,
+            complete sequence.
+ACCESSION   AF162694 AF077816 AF132548 M75132
+VERSION     AF162694.1  GI:9294728
+KEYWORDS    .
+SOURCE      Enterococcus gallinarum
+  ORGANISM  Enterococcus gallinarum
+            Bacteria; Firmicutes; Bacilli; Lactobacillales; Enterococcaceae;
+            Enterococcus.
+REFERENCE   1  (bases 1197 to 2543)
+  AUTHORS   Dutka-Malen,S., Molinas,C., Arthur,M. and Courvalin,P.
+  TITLE     Sequence of the vanC gene of Enterococcus gallinarum BM4174
+            encoding a D-alanine:D-alanine ligase-related protein necessary for
+            vancomycin resistance
+  JOURNAL   Gene 112 (1), 53-58 (1992)
+   PUBMED   1551598
+REFERENCE   2  (bases 2992 to 5104)
+  AUTHORS   Arias,C.A., Martin-Martinez,M., Blundell,T.L., Arthur,M.,
+            Courvalin,P. and Reynolds,P.E.
+  TITLE     Characterization and modelling of VanT: a novel, membrane-bound,
+            serine racemase from vancomycin-resistant Enterococcus gallinarum
+            BM4174
+  JOURNAL   Mol. Microbiol. 31 (6), 1653-1664 (1999)
+   PUBMED   10209740
+REFERENCE   3  (bases 2420 to 3011)
+  AUTHORS   Reynolds,P.E., Arias,C.A. and Courvalin,P.
+  TITLE     Gene vanXYC encodes D,D -dipeptidase (VanX) and
+            D,D-carboxypeptidase (VanY) activities in vancomycin-resistant
+            Enterococcus gallinarum BM4174
+  JOURNAL   Mol. Microbiol. 34 (2), 341-349 (1999)
+   PUBMED   10564477
+REFERENCE   4  (bases 1 to 6963)
+  AUTHORS   Arias,C.A., Courvalin,P. and Reynolds,P.E.
+  TITLE     vanC cluster of vancomycin-resistant Enterococcus gallinarum BM4174
+  JOURNAL   Antimicrob. Agents Chemother. 44 (6), 1660-1666 (2000)
+   PUBMED   10817725
+REFERENCE   5  (bases 1197 to 2543)
+  AUTHORS   Dutka-Malen,S., Molinas,C., Arthur,M. and Courvalin,P.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (26-APR-1993) Biochemistry, University of Cambridge,
+            Tennis Court Road, Cambridge CB2 1QW, United Kingdom
+REFERENCE   6  (bases 2992 to 5104)
+  AUTHORS   Arias,C.A. and Reynolds,P.E.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (13-JUL-1998) Biochemistry, University of Cambridge,
+            Tennis Court Road, Cambridge CB2 1QW, United Kingdom
+REFERENCE   7  (bases 1197 to 5104)
+  AUTHORS   Reynolds,P.E., Arias,C.A. and Courvalin,P.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (02-MAR-1999) Biochemistry, University of Cambridge,
+            Tennis Court Road, Cambridge CB2 1QW, United Kingdom
+REFERENCE   8  (bases 1 to 6963)
+  AUTHORS   Arias,C.A., Courvalin,P. and Reynolds,P.E.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (25-JUN-1999) Biochemistry, University of Cambridge,
+            Tennis Court Road, Cambridge CB2 1QW, United Kingdom
+COMMENT     On Jul 20, 2000 this sequence version replaced gi:7380948.
+FEATURES             Location/Qualifiers
+     source          1..6963
+                     /organism="Enterococcus gallinarum"
+                     /mol_type="genomic DNA"
+                     /strain="BM4174"
+                     /db_xref="taxon:1353"
+     CDS             253..1062
+                     /note="ATP-binding protein; Orf1"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ABC transporter"
+                     /protein_id="AAF86640.1"
+                     /db_xref="GI:9294729"
+                     /translation="MTTPVLTISDLHQTFEKGTINENHVLRGIDLTMNSGDFITIIGG
+                     NGAGKSTLLNSIAGTIPTEQGKIVLGDKEITRHSVTRRSKEISRVFQDPRMGTAVRLT
+                     VEENLALAYKRGQVRGFSSGVKGKHRAFFKEKLARLNLGLENRLTTEIGLLSGGQRQA
+                     ITLLMATLQQPKLILLDEHTAALDPKTSMTVMALTDQLIQEQQLTAFMVTHDMEDAIR
+                     YGNRLIMLHQGKIVVDITGEEKQSLTVPDLMALFHQNSGTELKDDQLLLHT"
+     gene            1411..2442
+                     /locus_tag="Egal_vanC"
+     CDS             1411..2442
+                     /locus_tag="vanC"
+                     /function="involved in vancomycin resistance"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="D-alanine-D-alanine ligase-related protein"
+                     /protein_id="AAA24786.1"
+                     /db_xref="GI:148325"
+                     /translation="MKKIAVLFGGNSPEYSVSLTSAASVIQAIDPLKYEVMTIGIAPT
+                     MDWYWYQGNLANVRNDTWLEDHKNCHQLTFSSQGFILGEKRIVPDVLFPVLHGKYGED
+                     GCIQGLLELMNLPYVGCHVAASALCMNKWLLHQLADTMGIASAPTLLLSRYENDPATI
+                     DRFIQDHGFPIFIKPNEAGSSKGITKVTDKTALQSALTTAFAYGSTVLIQKAIAGIEI
+                     GCGILGNEQLTIGACDAISLVDGFFDFEEKYQLISATITVPAPLPLALESQIKEQAQL
+                     LYRNLGLTGLARIDFFVTNQGAIYLNEINTMPGFTGHSRYPAMMAEVGLSYEILVEQL
+                     IALAEEDKR"
+     gene            2439..3011
+                     /locus_tag="Egal_vanXYc"
+     CDS             2439..3011
+                     /locus_tag="vanXYc"
+                     /function="involved in vancomycin resistance"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="D,D-dipeptidase/D,D-carboxypeptidase VanXYc"
+                     /protein_id="AAF61331.1"
+                     /db_xref="GI:7380949"
+                     /translation="MNTLQLINKNHPLKKNQEPPHLVLAPFSDHDVYLQPEVAKQWER
+                     LVRATGLEKDIRLVDGYRTEKEQRRLWEYSLKENGLAYTKQFVALPGCSEHQIGLAID
+                     VGLKKQEDDDLICPHFRDSAAADLFMQQMMNYGFILRYPEDKQEITGISYEPWHFRYV
+                     GLPHSQVITAQKWTLEEYHDYLAQTVRQFA"
+     gene            3008..5104
+                     /locus_tag="Egal_vanT"
+     CDS             3008..5104
+                     /locus_tag="vanT"
+                     /function="converts L-serine to D-serine; involved in
+                     vancomycin resistance"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="serine racemase VanT"
+                     /protein_id="AAD22403.1"
+                     /db_xref="GI:4545123"
+                     /translation="MKNKGIDQFRVIAAMMVVAIHCLPLHYLWPEGDILITLTIFRVA
+                     VPFFFMISGYYVFAELAVANSYPSRQRVFNFIKKQLKVYLLATLMFLPLALYSQTIGF
+                     DLPVGTLVQVLLVNGILYHLWYFPALITGSLLLTSLLIHVSFKKVFWLAAGLYLIGLG
+                     GDSWFGLIQQTPIEPFYTAVFHLLDGTRNGIFFTPLFLCLGVLVRKQSEKRSLSKTAL
+                     FFLISLIGLLIESAYLHGFSIPKHDSMYLFLPVVLFFLFPLILRWHPHRTWKHPGQLS
+                     LWLYLLHPYTIAGTHFLSQKISILQNNLINYLVVLILTIGFICLFLRQKHSWFRHKQT
+                     TPVKRAVKEFSKTALLHNLQEIQRIISPKTKVMAVVKADAYGCGAKEVAPVLEQAGID
+                     FFAVATIDEGIRLRKNAVKSPILVLGYTSPKRIKELRRYSLTQSIISEGHAVALSQRK
+                     VAIDCHLAIDTGMHRLGVTPTIDSILSIFDLPFLTISGVYSHLGSADRLNPDSMIRTQ
+                     KQIACFDQILLELDQRQISYGITHLQSSYGILNYPDLNYDYVRPGILLTGSLSDTNEP
+                     TKQRVSLQPILTLKAQLITKRVVAKGEAIGYGQTAVANQETTVGVVSIGYCDGLPRSL
+                     SNQEFCLSYRGQSLPQIGLICMDMLLIDLSHCPTIPIESEIEILTDWSDTAEQVQTIT
+                     NELICRIGPRVSARIK"
+     gene            5193..5888
+                     /locus_tag="Egal_vanRc"
+     CDS             5193..5888
+                     /locus_tag="vanRc"
+                     /function="involved in vancomycin resistance"
+                     /note="member of the two-component regulatory system"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="response regulator VanRc"
+                     /protein_id="AAF86641.1"
+                     /db_xref="GI:9294730"
+                     /translation="MSEKIVVVDDEKEIADLVTTFLQNEGFSVQPFYDGTSAIAYIEK
+                     EAIDLAVLDVMLPDIDGFQLLQQIRKTHFFPVLMLTAKGEDLDKITGLSLGADDYVTK
+                     PFNPLEVVARVKTQLRRYQRYNHSTASPTVEEYEKDGLILKINSHQCILYGKEVFLTP
+                     IEFKILLYLFEHQGSVVSSETLFEAVWKEKYLDNNNTVMAHIARLREKLHEEPRKPKL
+                     IKTVWGVGYIIEK"
+     gene            5878..6963
+                     /locus_tag="Egal_vanSc"
+     CDS             5878..6963
+                     /locus_tag="vanSc"
+                     /function="involved in vancomycin resistance"
+                     /note="member of the two-component regulatory system"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="sensor-histidine kinase VanSc"
+                     /protein_id="AAF86642.1"
+                     /db_xref="GI:9294731"
+                     /translation="MKNRNPLIRKLLTQYFVTTGILLAFLVMIPLVIRFIAGTRTWYG
+                     TEPIYYILRFFADRWLFCVAIGALLIWFGTTIYYMTKAIGYLNETIQATTQLIEEPSK
+                     RITLSSHLIDVQEEMNQLREKSLQDQRAAKEAEQRKNDLIVYLAHDLRTPLTSVIGYL
+                     TLLKEEPQLSNAMRNRYTEIALQKAQRLELLISEFFEITRFNLTTIVLQTETTDLSLM
+                     LEQLTFEFLPLLEEKNLNWQLNLQKNVLATVDTEKIARVFDNLIRNAINYSYPDSPLL
+                     LELVESDSIHIRLTNRGKTIPEEMIGRLFEPFYRMDSSRATATSGTGLGLPIAKEILL
+                     ASGGDISAESKDETIIFNVRLPKPANN"
+ORIGIN      
+        1 gatcggatta gcatcgatca ttatcgcgga agtccttttc agcaataaat ctttgtgggt
+       61 tcgtttgatc acgattgtga ttggtgcgat tttgtatcgt ctaatcctgg ccatcgtctt
+      121 tgaattcaac gtggaagctt cagattcaaa acttgcctct gccatcgttt tggttatctg
+      181 tctttcattg ccgcaaattc gaacgaaact tggattgcaa aaatttcttc cgaaaaccaa
+      241 aggaggtcaa tcatgacgac acctgtttta acgatcagtg atttacacca aacatttgaa
+      301 aaaggaacca tcaacgaaaa tcatgtcctt cgcgggatcg atctcactat gaacagcggt
+      361 gatttcatta cgattatcgg tggaaacggt gcaggaaaat caacattact caatagtatt
+      421 gctggaacga tcccaacaga acaaggtaag atcgtcttag gtgacaaaga aatcacacgt
+      481 cattcagtca cacgacgctc caaagaaatc agtcgtgtct tccaagaccc gcggatgggg
+      541 acagccgttc gtttgacagt cgaagaaaac ttagcccttg cttataaaag aggccaggtt
+      601 cgcgggtttt cctccggtgt caaaggaaag catcgggcct tcttcaaaga aaagttagct
+      661 cgcttgaatc ttggtcttga aaatcgactg acgactgaga ttgggctgct ttccggagga
+      721 cagcggcaag cgatcacact attgatggcg accttgcaac agcctaaact gatcctgcta
+      781 gacgaacata ctgcagcttt agatccgaaa acctccatga ctgtgatggc actgactgat
+      841 cagttgattc aagaacagca gttgacggca tttatggtca ctcatgatat ggaagatgcc
+      901 atccgttacg gcaatcgctt gatcatgctc catcaaggca aaatcgttgt cgatatcaca
+      961 ggtgaggaaa aacaatcctt aacggtaccg gatttgatgg cactcttcca tcaaaatagt
+     1021 gggactgagc taaaagatga tcagctactg ttgcacactt aactgtatct tctttagcta
+     1081 tagctgcctc aattgggcac atcacactac gccaaagaac taacgtatga atacagagga
+     1141 accaagttga aaatagttca gctcggttcc ttttttgtac gctttcctgc atgcgtgagc
+     1201 tcttccttca acgcacttct gtaccaagag ttgttgtcca tttgatcact aacaatagct
+     1261 tcccctgctt tcttcaagcc ctttgtcata aaatcgttag attttcatca taaaaatacg
+     1321 agaaagacaa caggaagacc gcaaattttc ttttcttttc ctaggtacac tgaatgtaac
+     1381 cttaaaagaa aaaaggaaag gaagaaaatg atgaaaaaaa ttgccgtttt atttggaggg
+     1441 aattctccag aatactcagt gtcactaacc tcagcagcaa gtgtgatcca agctattgac
+     1501 ccgctgaaat atgaagtaat gaccattggc atcgcaccaa caatggattg gtattggtat
+     1561 caaggaaacc tcgcgaatgt tcgcaatgat acttggctag aagatcacaa aaactgtcac
+     1621 cagctgactt tttctagcca aggatttata ttaggagaaa aacgaatcgt ccctgatgtc
+     1681 ctctttccag tcttgcatgg gaagtatggc gaggatggct gtatccaagg actgcttgaa
+     1741 ctaatgaacc tgccttatgt tggttgccat gtcgctgcct ccgcattatg tatgaacaaa
+     1801 tggctcttgc atcaacttgc tgataccatg ggaatcgcta gtgctcccac tttgctttta
+     1861 tcccgctatg aaaacgatcc tgccacaatc gatcgtttta ttcaagacca tggattcccg
+     1921 atctttatca agccgaatga agccggttct tcaaaaggga tcacaaaagt aactgacaaa
+     1981 acagcgctcc aatctgcatt aacgactgct tttgcttacg gttctactgt gttgatccaa
+     2041 aaggcgatag cgggtattga aattggctgc ggcatcttag gaaatgagca attgacgatt
+     2101 ggtgcttgtg atgcgatttc tcttgtcgac ggtttttttg attttgaaga gaaataccaa
+     2161 ttaatcagcg ccacgatcac tgtcccagca ccattgcctc tcgcgcttga atcacagatc
+     2221 aaggagcagg cacagctgct ttatcgaaac ttgggattga cgggtctggc tcgaatcgat
+     2281 tttttcgtca ccaatcaagg agcgatttat ttaaacgaaa tcaacaccat gccgggattt
+     2341 actgggcact cccgctaccc agctatgatg gcggaagtcg ggttatccta cgaaatatta
+     2401 gtagagcaat tgattgcact ggcagaggag gacaaacgat gaacacatta caattgatca
+     2461 ataaaaacca tccattgaaa aaaaatcaag agcccccgca cttagtgcta gctcctttta
+     2521 gcgatcacga tgtttacctg cagccagaag tggcaaaaca atgggaacga ctcgtacgag
+     2581 caaccggact agaaaaggac attcgtctgg tagatgggta tcgtacggaa aaagaacagc
+     2641 gacgcttgtg ggagtattct ctaaaagaaa acgggttagc ttataccaaa caattcgttg
+     2701 ctttgccagg ttgcagtgaa catcaaatcg gtctggccat tgatgtagga ctaaagaaac
+     2761 aagaagatga tgatcttatc tgccctcatt ttcgagatag tgctgctgct gatttattta
+     2821 tgcagcagat gatgaattat ggctttattc tacgctatcc ggaagataaa caagagatca
+     2881 ccggtatcag ttatgaacct tggcattttc gttatgtcgg gcttccccat agccaagtca
+     2941 tcactgccca aaaatggact ctggaagaat accatgatta cttggctcag acagtgaggc
+     3001 agttcgcatg aaaaataaag gaatcgatca atttcgtgtg attgcagcca tgatggtggt
+     3061 tgcgatccat tgtcttcccc ttcactattt atggccagaa ggcgatatcc taatcacatt
+     3121 gacgattttt cgagtagctg ttcctttctt ttttatgatc agtggttact atgtgtttgc
+     3181 agaacttgct gtggccaata gttatccttc gcgacaacga gtattcaact ttatcaaaaa
+     3241 acagctaaaa gtctatctat tagccacact aatgttttta ccattagcac tctatagtca
+     3301 aacgatcggc ttcgatctac cagttggaac attagtacaa gtacttttgg tcaatggcat
+     3361 tctttatcat ctttggtact ttccggcttt gattactggg agcctgctcc taacaagttt
+     3421 gctgatacat gtctccttca aaaaagtgtt ctggcttgcg gctggattgt acctgattgg
+     3481 attaggtggt gatagttggt ttggactgat ccaacagaca ccaatcgaac cattctatac
+     3541 tgctgtgttc cacctattag atggtacccg caacggtatt ttctttacac cattgttttt
+     3601 gtgcttaggt gtgctggtca gaaaacaatc agagaaaaga agtttatcca aaacagctct
+     3661 cttctttttg atcagtctta tcggattgct tattgagagt gcgtacttgc atgggttttc
+     3721 tatacctaaa catgacagta tgtatctctt cttgcctgtt gtactctttt tcttatttcc
+     3781 gctgatcttg cgctggcatc cccacaggac ttggaagcat ccaggacagc tatctttgtg
+     3841 gctttacctt ttacatcctt atacaattgc cggcacacac tttttgagcc aaaaaatcag
+     3901 cattctgcaa aacaatctaa tcaactattt ggttgttttg atcttgacga ttggattcat
+     3961 ttgcctcttt ttaagacaaa aacactcatg gtttagacac aaacaaacaa cgcccgttaa
+     4021 aagggccgta aaagaattct caaagacagc ccttttgcat aatctacagg agatccagcg
+     4081 gatcatctca ccgaaaacaa aagtgatggc agtcgttaaa gccgatgcct acggctgtgg
+     4141 tgccaaggaa gttgctcctg ttttagaaca agccggaatt gatttttttg cggtggctac
+     4201 gattgatgaa ggtattcgat tgcggaaaaa tgctgtcaaa agccccatct tggtcttggg
+     4261 atatacctct ccaaaacgca taaaagaact tcgtcgctac tcattgaccc aatcgatcat
+     4321 cagcgaaggt catgctgtag cattgtcaca aagaaaagta gcgattgact gtcatttagc
+     4381 catcgatact gggatgcatc ggttaggtgt aacaccgact atcgattcga ttctttcgat
+     4441 tttcgatttg cccttcttga cgatcagtgg tgtttattct catcttggtt cggcagatcg
+     4501 cttaaatcct gatagtatga ttcgcactca gaagcagatt gcctgcttcg atcagattct
+     4561 cctagagttg gatcagagac agatttctta tggtatcaca cacttacaaa gcagttatgg
+     4621 tattttgaat tatccagact taaactatga ttatgtgcgt ccggggattt tattgacagg
+     4681 atccctcagt gatacgaacg agcctacaaa acaacgagta agcttacagc ctattctgac
+     4741 cctcaaagca cagttgatca ctaagcgagt cgttgccaaa ggggaagcga tcggttatgg
+     4801 gcaaaccgcc gtcgcgaatc aagaaacaac tgttggtgtt gtgagcatcg gctattgtga
+     4861 cggactgccc cgttctctat caaatcaaga gttttgtctt tcctatcgcg gtcagtcctt
+     4921 gccgcagatc ggcttgatct gcatggacat gcttttgata gacttgagcc attgtcctac
+     4981 gatcccaatt gaaagtgaaa ttgaaattct gacagattgg agcgatactg ccgagcaagt
+     5041 acaaactata accaatgagt tgatttgtcg gatcggtcca cgagtcagtg ctaggatcaa
+     5101 atagaaaacg atgcataagt ttaccaggta aggtatgatg gaggtatgga aatgtgagaa
+     5161 tccgaaacta tgtttaggtg gagtgagaga gtatgtcaga aaaaatagtc gttgttgatg
+     5221 atgaaaaaga aattgcggac ttagtcacga cctttttgca aaacgaagga tttagtgtgc
+     5281 agccgtttta tgatggtact agtgccatcg cctatattga aaaagaagcc attgatttgg
+     5341 ccgttttaga tgtcatgttg ccggacattg atggttttca actgttacag cagatccgca
+     5401 agacccattt tttcccagtg ttgatgctga ctgccaaggg agaggatcta gacaaaatca
+     5461 ctggattgag tttgggagcg gatgactatg tcaccaaacc ttttaatcct ttagaagttg
+     5521 tggctcgggt aaaaacccaa ttgcggcgct accagcgata caatcattcc actgcttctc
+     5581 caacagtaga agaatatgaa aaagacggct tgatactcaa aatcaacagt catcaatgca
+     5641 ttctctacgg caaagaagtt ttcctgactc ccattgagtt caaaatattg ctttatttat
+     5701 ttgagcacca aggatccgtc gtctcttccg aaacactttt cgaagcggtt tggaaagaaa
+     5761 aatatttaga taacaataat actgtcatgg cacacattgc tcgtttaaga gaaaaattgc
+     5821 atgaagaacc tcgtaaacct aaattaatca aaaccgtatg gggggtcggc tatatcattg
+     5881 aaaaatagaa atcctttgat ccgaaagctc ttgacccaat acttcgtcac cactggaatc
+     5941 ttgctggcat tccttgtaat gattccatta gtcattcgct ttattgccgg aacccggact
+     6001 tggtatggaa cggaacctat ctactatatc ttacgttttt ttgcggatcg ctggttgttt
+     6061 tgtgttgcga ttggcgcttt actgatatgg tttggtacca ccatttacta tatgaccaaa
+     6121 gccatcggtt atttgaatga aacgatccaa gccacgactc aactgataga agaaccatcc
+     6181 aaacgcatca ctttatcgag ccatctgatt gatgttcaag aggaaatgaa tcaactgcgg
+     6241 gagaaaagtc tgcaagatca acgtgccgct aaagaagcgg aacagcggaa aaatgatttg
+     6301 atcgtttatc tcgcccacga tttgcggacg cctctgacaa gtgtcatagg ttatctgact
+     6361 cttctaaaag aagaaccaca attatccaat gcgatgcgga atcgttacac ggagattgct
+     6421 ttacaaaaag cccaacggct ggaactattg atcagtgaat tcttcgagat cacacgcttc
+     6481 aatttgacca cgatcgtttt gcagacagaa acgactgatt taagtttaat gcttgaacag
+     6541 ctgacctttg agtttttacc tctcttggaa gaaaagaatc taaattggca actcaactta
+     6601 caaaaaaatg ttcttgcaac agtagacacc gaaaaaatag ctcgtgtctt tgataatctc
+     6661 attcgcaatg ccatcaacta cagctatcca gattcgcctt tacttcttga attggtcgaa
+     6721 tcagacagta ttcacattcg tctgacgaat cgtggaaaaa caattccaga agagatgatc
+     6781 ggacgtctct ttgaaccttt ctatcgcatg gattcttccc gagctacagc cacaagcgga
+     6841 actggtcttg gtcttccgat tgcaaaagag attctgttag catctggcgg ggatatctcg
+     6901 gcagaaagca aagacgaaac catcattttc aacgttcgct tgccaaaacc tgccaacaac
+     6961 tga
+//
+
+
