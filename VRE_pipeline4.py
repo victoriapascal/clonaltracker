@@ -186,6 +186,36 @@ def get_contigs_seqs(output_dir):
 				for entry in lines[index:index+2]:
 					out.write(entry)
 			out.close()
+	return sample_contigs
+
+def run_ragtag(output_dir, sample_contigs, van_type):
+	'''
+	Run ragtag to scaffold contig only when the transposon is found split in more than one contigs	
+	'''
+	for sample, contigs in sample_contigs.items():
+		if len(contigs) > 1: ## when there the tnp is split into multiple contigs, run ragtag
+			out = output_dir + os.sep + sample + "_ragtag"
+			ref_tn = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/' + [f for f in os.listdir('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/') if van_type in f and f.endswith(".fa")][0]
+			query = output_dir + os.sep + [f for f in os.listdir(output_dir) if sample in f and '_tnp_contig.fa' in f][0]
+			cmd = ['ragtag.py', 'scaffold','-o', out, ref_tn, query]
+			torun = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.PIPE)			
+			out1, err = torun.communicate()
+			print(err)
+			##get scaffolded region
+			with open(str(out) + os.sep + 'ragtag.scaffold.fasta', 'r') as f:
+				lines = f.readlines()
+			os.remove(output_dir + os.sep + sample + "_tnp_contig.fa") ##remove existing file
+			os.remove(output_dir + os.sep + sample + "_tnp_contig.fa.fai")
+			with open(output_dir + os.sep + sample + "_tnp_contig.fa", 'w') as f2:
+				for num, line in zip(range(len(lines)), lines):
+					if line.startswith(">"):
+						header = ">" + sample + "_contig" + str(num) + "_ragtag" + '\n'
+						f2.write(header)
+					else:
+						f2.write(line)
+						  
+					
+				
 def run_isescan(out_dir):
 	'''
 	Run isescan to assess potential tnp IS
@@ -274,8 +304,11 @@ def create_gbk_from_isescan_out(out_dir):
 		os.mkdir(out_dir + os.sep + "tn_gbks")	
 	for sample in samples:
 		proteome_dir = out_dir + os.sep + 'ISEScan_out' + os.sep + sample + os.sep + 'proteome' + os.sep + out_dir
+		print(proteome_dir)
 		proteome_files = os.listdir(proteome_dir)
-		genes = [f for f in proteome_files if '_tnp_contig.fa.ffn' in f][0] 	
+		print(proteome_files)
+		genes = [f for f in proteome_files if '_tnp_contig.fa.ffn' in f][0]
+		print(genes)	
 		prots = [f for f in proteome_files if '_tnp_contig.fa.faa' in f][0]
 		is_dir = out_dir + os.sep + 'ISEScan_out' + os.sep + sample + os.sep + out_dir
 		if os.path.isdir(is_dir):
@@ -296,6 +329,7 @@ def create_gbk_from_isescan_out(out_dir):
 			 if '>' in p:
   				p_index = prot.index(p)
   				records[p.strip()] = [prot[p_index+1].strip()]
+
 		if os.path.isdir(is_dir):
 			##insertion nucleotide sequence
 			with open(is_dir + os.sep + is_nuc, 'r') as f4:
@@ -394,7 +428,8 @@ if __name__ == '__main__' :
 			#run_tetyper(fa2, output_dir, records2)
 			result  = parse_tetyper_output(output_dir)
 			##Run isescan to check IS
-			get_contigs_seqs(output_dir)	
+			num_contigs = get_contigs_seqs(output_dir)
+			run_ragtag(output_dir, num_contigs, van_type)	
 			run_isescan(output_dir)
 			identity = parse_isescan_output(output_dir)
 			create_gbk_from_isescan_out(output_dir)
