@@ -5,7 +5,7 @@ from Bio import SeqIO, SeqFeature
 from Bio.Seq import Seq
 from BCBio import GFF
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC
+#from Bio.Alphabet import IUPAC
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.Align.Applications import ClustalwCommandline
 from shutil import copyfile
@@ -92,23 +92,23 @@ def run_poppunk(list_genomes, poppunk_db, out_dir):
 def run_tetyper(fasta, out_dir, type_pident):
 	'''Running TETyper to assess transposon type'''
 	print('3. Running TETyper to assess transposon type')
-	location_reads = "/".join(fasta.split('/')[:-1]) + '/'
+	#location_reads = "/".join(fasta.split('/')[:-1]) + '/'
 	#location_reads = '/hpc/dla_mm/vpascalandreu/data/vanA_raw_reads/vanA_reads/'
 	#location_reads = '/hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2'
 	#location_reads = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
-	#location_reads = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/vanB_dataset_wget/'
+	location_reads = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/vanB_dataset_wget/'
 	sample = fasta.split('/')[-1].split('.')[0] + "_"
-	#fq1 = [file for file in os.listdir(location_reads) if 'R1.fastq.gz' in file and sample in file][0]
-	#fq2 = [file for file in os.listdir(location_reads) if 'R2.fastq.gz' in file and sample in file][0]
-	fq1 = [file for file in os.listdir(location_reads) if '_R1_val_1.fq' in file and sample in file][0]
-	fq2 = [file for file in os.listdir(location_reads) if '_R2_val_2.fq' in file and sample in file][0]
+	fq1 = [file for file in os.listdir(location_reads) if 'R1.fastq.gz' in file and sample in file][0]
+	fq2 = [file for file in os.listdir(location_reads) if 'R2.fastq.gz' in file and sample in file][0]
+	#fq1 = [file for file in os.listdir(location_reads) if '_R1_val_1.fq' in file and sample in file][0]
+	#fq2 = [file for file in os.listdir(location_reads) if '_R2_val_2.fq' in file and sample in file][0]
 	tnp_ref = ''
 	for a in type_pident.keys():
 		if "vanA" in a:
 			tnp_ref = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/vanA_M97297.fa'
 		else:
 			if "vanB" in a:
-				tnp_ref = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/vanB_AF063010.fasta'
+				tnp_ref = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/vanB_AY655721.2.fa'
 	if not os.path.isdir(out_dir + os.sep + 'TETyper_out'):
 		os.mkdir(out_dir + os.sep + 'TETyper_out')
 	else:
@@ -170,11 +170,12 @@ def get_contigs_seqs(output_dir):
 		with open(files + os.sep + b, 'r') as f1:
 			for line in f1:
 				line = line.strip().split('\t')
-				sample_contigs[name].append(line[0])
+				if not line[0] in sample_contigs[name]:
+					sample_contigs[name].append(line[0])
 	
 	##remove hard-coded path when the usual one is known	
-	#fna = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/bk_vanB_dataset_wget/202106102320_results/scaffolds/'	
-	fna = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
+	fna = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/bk_vanB_dataset_wget/202106102320_results/scaffolds/'	
+	#fna = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
 	for a in sample_contigs.keys():
 		with open(fna + os.sep + a + '.fna', 'r') as f2:
 			lines = f2.readlines()
@@ -263,6 +264,90 @@ def evaluate_mash_distances(out_dir):
 		else:
 			print('These two genomes are unlikely to be clonal as their MASH distance is %s' %(a))
 
+def create_gbk_from_isescan_out(out_dir):
+	'''
+	From ISEScan ISs, ORFs and gene predictions build a genbank find to use it as input for clinker
+	'''
+	
+	samples = os.listdir(out_dir + os.sep + 'ISEScan_out')
+	if not os.path.isdir(out_dir + os.sep + "tn_gbks"):
+		os.mkdir(out_dir + os.sep + "tn_gbks")	
+	for sample in samples:
+		proteome_dir = out_dir + os.sep + 'ISEScan_out' + os.sep + sample + os.sep + 'proteome' + os.sep + out_dir
+		proteome_files = os.listdir(proteome_dir)
+		genes = [f for f in proteome_files if '_tnp_contig.fa.ffn' in f][0] 	
+		prots = [f for f in proteome_files if '_tnp_contig.fa.faa' in f][0]
+		is_dir = out_dir + os.sep + 'ISEScan_out' + os.sep + sample + os.sep + out_dir
+		if os.path.isdir(is_dir):
+			is_files = os.listdir(is_dir)
+			is_nuc = [f for f in is_files if '_tnp_contig.fa.is.fna' in f][0]
+			is_prot = [f for f in is_files if '_tnp_contig.fa.orf.faa' in f][0] 	
+		
+		records = {}
+		##genes with transposon
+		with open(proteome_dir + os.sep + genes, 'r') as f:
+			 nuc = f.readlines()
+
+		##proteins with transposon
+		with open(proteome_dir + os.sep + prots, 'r') as f2:
+ 			prot = f2.readlines()
+		
+		for p in prot:
+			 if '>' in p:
+  				p_index = prot.index(p)
+  				records[p.strip()] = [prot[p_index+1].strip()]
+		if os.path.isdir(is_dir):
+			##insertion nucleotide sequence
+			with open(is_dir + os.sep + is_nuc, 'r') as f4:
+				 isn = f4.readlines()
+
+			##insertion protein sequence
+			with open(is_dir + os.sep + is_prot, 'r') as f3:
+				 isp = f3.readlines()
+		
+			for i in isp:
+				 if ">" in i:
+  					isp_index = isp.index(i)
+  					records[i.strip()].append(isp[isp_index+1].strip())
+		
+		contigs = out_dir + os.sep + sample + '_tnp_contig.fa'
+		header = []
+		seq = []
+		with open(contigs, 'r') as fasta:
+			for line in fasta:
+				if not line.startswith(">"):
+					seq.append(line.strip())
+				else:
+   					header.append(line.strip())
+
+		seqs = Seq(''.join(seq))
+		#seqs = Seq(''.join(seq), alphabet=IUPAC.unambiguous_dna)
+		record = SeqRecord(seqs, annotations={"molecule_type": "DNA"})
+
+		for i in records.keys():
+			start = int(i.split(' ')[0].split('_')[-3])
+			end = int(i.split(' ')[0].split('_')[-2])
+			strand = int(i.split(' ')[0].split('_')[-1].replace('+', '1').replace('-', '-1'))
+			my_feature = SeqFeature(FeatureLocation(start, end, strand=strand), type="CDS", id=i)
+			my_feature.qualifiers['translation'] = records[i][0]
+			record.features.append(my_feature)
+
+		with open(out_dir + os.sep + 'tn_gbks/' + sample + '.gb', 'w') as input_handle:
+			SeqIO.write(record, input_handle, "genbank")
+def run_clinker(out_dir):
+	'''
+	From the the tn gbk files, run clincker to visualize the similarities/differences between the isolates transposons
+	'''
+
+	output_file1 =  out_dir + os.sep + 'clinker_tn_viz.html'
+	output_file2 = out_dir + os.sep + 'clinker_tn_msa.aln'
+	gbks = os.listdir(out_dir + os.sep + 'tn_gbks')
+	inp = out_dir + '/tn_gbks/*'
+	cmd = 'clinker '  + inp + ' -p '+ output_file1 + ' -o ' + output_file2
+	print(cmd)
+	torun = subprocess.Popen([cmd], stderr=subprocess.PIPE, shell=True)
+	err = torun.communicate()
+	print(err)
 
 if __name__ == '__main__' :
 	fa1 = sys.argv[1]
@@ -304,20 +389,25 @@ if __name__ == '__main__' :
 		if van_type_set == van_type2_set: ##if both genomes have the same van type
 			print('The two genomes are %s type' %(van_type))
 			
-			##run poppunk
-			run_tetyper(fa1, output_dir, records1)
-			run_tetyper(fa2, output_dir, records2)
+			##run tetyper
+			#run_tetyper(fa1, output_dir, records1)
+			#run_tetyper(fa2, output_dir, records2)
 			result  = parse_tetyper_output(output_dir)
-			if result == True:
-				##Run isescan to check IS
-				get_contigs_seqs(output_dir)
-				run_isescan(output_dir)
-				identity = parse_isescan_output(output_dir)
-				if identity == True:
-					##run MASH to assess clonality
-					assess_clonality_with_mash_sketch(output_dir, fa1, fa2)
-					assess_clonality_with_mash_dist(output_dir)
-					evaluate_mash_distances(output_dir)
+			##Run isescan to check IS
+			get_contigs_seqs(output_dir)	
+			run_isescan(output_dir)
+			identity = parse_isescan_output(output_dir)
+			create_gbk_from_isescan_out(output_dir)
+			ref_tn = [f for f in os.listdir('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/') if van_type in f and f.endswith(".gb")]
+			##copy tnp reference gbk file
+			copyfile('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/' + ref_tn[0], output_dir + os.sep + 'tn_gbks/' + ref_tn[0])
+			run_clinker(output_dir)
+
+			if result == True and identity == True: # if they have the same SNPs, deletions and ISs
+				##run MASH to assess clonality
+				assess_clonality_with_mash_sketch(output_dir, fa1, fa2)
+				assess_clonality_with_mash_dist(output_dir)
+				evaluate_mash_distances(output_dir)
 			else:
 				print('The transposons of these two genomes are not identical')
 			
