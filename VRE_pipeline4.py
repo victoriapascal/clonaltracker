@@ -173,11 +173,12 @@ def get_contigs_seqs(output_dir):
 				if not line[0] in sample_contigs[name]:
 					sample_contigs[name].append(line[0])
 	
-	##remove hard-coded path when the usual one is known	
-	fna = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/bk_vanB_dataset_wget/202106102320_results/scaffolds/'	
+	##remove hard-coded path when the usual one is known
+	fna = '/hpc/dla_mm/vpascalandreu/data/vanA_fastas'	
+	#fna = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/bk_vanB_dataset_wget/202106102320_results/scaffolds/'	
 	#fna = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
 	for a in sample_contigs.keys():
-		with open(fna + os.sep + a + '.fna', 'r') as f2:
+		with open(fna + os.sep + a + '.fasta', 'r') as f2:
 			lines = f2.readlines()
 			out = open(output_dir + os.sep + a + "_tnp_contig.fa", 'w')
 			for c in sample_contigs[a]:
@@ -204,8 +205,11 @@ def run_ragtag(output_dir, sample_contigs, van_type):
 			##get scaffolded region
 			with open(str(out) + os.sep + 'ragtag.scaffold.fasta', 'r') as f:
 				lines = f.readlines()
-			os.remove(output_dir + os.sep + sample + "_tnp_contig.fa") ##remove existing file
-			os.remove(output_dir + os.sep + sample + "_tnp_contig.fa.fai")
+			try:
+				os.remove(output_dir + os.sep + sample + "_tnp_contig.fa") ##remove existing file
+				os.remove(output_dir + os.sep + sample + "_tnp_contig.fa.fai")
+			except:
+				pass
 			with open(output_dir + os.sep + sample + "_tnp_contig.fa", 'w') as f2:
 				for num, line in zip(range(len(lines)), lines):
 					if line.startswith(">"):
@@ -437,11 +441,11 @@ if __name__ == '__main__' :
 			##copy tnp reference gbk file
 			copyfile('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/' + ref_tn[0], output_dir + os.sep + 'tn_gbks/' + ref_tn[0])
 			run_clinker(output_dir)
+			assess_clonality_with_mash_sketch(output_dir, fa1, fa2)
+			assess_clonality_with_mash_dist(output_dir)
 
 			if result == True and identity == True: # if they have the same SNPs, deletions and ISs
-				##run MASH to assess clonality
-				assess_clonality_with_mash_sketch(output_dir, fa1, fa2)
-				assess_clonality_with_mash_dist(output_dir)
+				#evaluate MASH output to assess clonality
 				evaluate_mash_distances(output_dir)
 			else:
 				print('The transposons of these two genomes are not identical')
