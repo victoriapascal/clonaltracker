@@ -32,7 +32,6 @@ def run_blastn(db, out_dir, fasta, use):
 	cmd = ['blastn', '-query', str(fasta), '-db', db, '-outfmt', '6', '-evalue', '1e-10']
 	torun = subprocess.Popen(cmd, stdout=output_file, stderr=subprocess.PIPE)
 	out, err = torun.communicate()
-	print(err)
 	output_file.close()
 
 
@@ -59,7 +58,7 @@ def check_blastn_output(out_dir, fasta):
 
 def run_poppunk(list_genomes, poppunk_db, out_dir):
 	'''Run poppunk usng the vanAB=new_outbreak database and the two input genomes'''
-	print('2. Running POPpunk to cluster inputted genomes into a larger vanA and vanB database')
+	print('2. Running PopPUNK to cluster inputted genomes into a larger vanA and vanB database')
 	#pp_out = out_dir + os.sep + 'poppunk_analysis'
 	#os.mkdir(out_dir + os.sep + 'poppunk_analysis')
 	cwd = os.getcwd()
@@ -69,7 +68,6 @@ def run_poppunk(list_genomes, poppunk_db, out_dir):
 	cmd = ['poppunk_assign', '--db', 'vanAB_dataset', '--query', 'list_new_genomes.txt', '--output', 'vanAB_dataset_updated', '--update-db']
 	torun = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	out, err = torun.communicate()
-	print(' '.join(cmd))
 	
 	##fit the model
 	cmd2 = ['poppunk', '--fit-model', 'dbscan', '--ref-db', 'vanAB_dataset_updated']
@@ -94,9 +92,9 @@ def run_tetyper(fasta, out_dir, type_pident):
 	print('3. Running TETyper to assess transposon type')
 	#location_reads = "/".join(fasta.split('/')[:-1]) + '/'
 	#location_reads = '/hpc/dla_mm/vpascalandreu/data/vanA_raw_reads/vanA_reads/'
-	#location_reads = '/hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2'
+	location_reads = '/hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2/'
 	#location_reads = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
-	location_reads = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/vanB_dataset_wget/'
+	#location_reads = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/vanB_dataset_wget/'
 	sample = fasta.split('/')[-1].split('.')[0] + "_"
 	fq1 = [file for file in os.listdir(location_reads) if 'R1.fastq.gz' in file and sample in file][0]
 	fq2 = [file for file in os.listdir(location_reads) if 'R2.fastq.gz' in file and sample in file][0]
@@ -146,13 +144,16 @@ def parse_tetyper_output(output_dir):
 	
 	with open('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/tnp_db.pickle', 'rb') as handle:
 		tnp_db = pickle.load(handle)
+	with open('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/tn_nomenclature.pickle', 'rb') as handle2:
+		tn_nomen = pickle.load(handle2)
+	
 	snp1 = '-'.join(snps[names[0]])
 	snp2 = '-'.join(snps[names[1]])
 	if snp1 in tnp_db.keys():
-		print(names[0] + " has the same transposon as " + ','.join(tnp_db[snp1]))
+		print(names[0] + " has the transposon type " + tn_nomen[snp1] + ", the same transposon as " + ','.join(tnp_db[snp1]))
 
 	if snp2 in tnp_db.keys():
-                print(names[1] + " has the same transposon as " + ','.join(tnp_db[snp2]))
+                print(names[1] + " has the transposon type " + tn_nomen[snp2] + ", the same transposon as " + ','.join(tnp_db[snp2]))
 
 
 	return result
@@ -174,7 +175,7 @@ def get_contigs_seqs(output_dir):
 					sample_contigs[name].append(line[0])
 	
 	##remove hard-coded path when the usual one is known
-	fna = '/hpc/dla_mm/vpascalandreu/data/vanA_fastas'	
+	fna = '/hpc/dla_mm/vpascalandreu/data/vanB_fastas'	
 	#fna = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/bk_vanB_dataset_wget/202106102320_results/scaffolds/'	
 	#fna = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
 	for a in sample_contigs.keys():
@@ -201,8 +202,6 @@ def run_ragtag(output_dir, sample_contigs, van_type):
 			cmd = ['ragtag.py', 'scaffold','-o', out, ref_tn, query]
 			torun = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.PIPE)			
 			out1, err = torun.communicate()
-			print(err)
-			##get scaffolded region
 			with open(str(out) + os.sep + 'ragtag.scaffold.fasta', 'r') as f:
 				lines = f.readlines()
 			try:
@@ -224,6 +223,7 @@ def run_isescan(out_dir):
 	'''
 	Run isescan to assess potential tnp IS
 	'''
+	print("4. Running ISEScan to predict ISs")
 	is_out = output_dir + os.sep + "ISEScan_out"
 	if not os.path.isdir(is_out):
 		os.mkdir(is_out)
@@ -233,6 +233,7 @@ def run_isescan(out_dir):
 		cmd = ['isescan.py', '--seqfile', out_dir + os.sep+ cf, '--output', is_out + os.sep + od]
 		torun = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		out, err = torun.communicate()
+
 def parse_isescan_output(out_dir):
 	'''
 	Check ISEScan output folder to see if the two genomes have the same (if any) IS
@@ -267,14 +268,14 @@ def assess_clonality_with_mash_sketch(out_dir, fasta, fasta2):
 	'''
 	When the genomes have the same van type and surrounding regions, assess the clonality usng MASH
 	'''
-	print('4. Running MASH skecth to assess clonality (whole genome similarity)')
+	print('5. Running MASH sketch to assess clonality (whole genome similarity)')
 	cmd = ['mash', 'sketch', '-k', '32', '-s', '8000', '-o', out_dir + os.sep + 'mash_sketch', fasta, fasta2]
 	torun = subprocess.Popen(cmd, stdout=None, stderr=subprocess.PIPE)
 	out, err = torun.communicate()
 
 def assess_clonality_with_mash_dist(out_dir):
 
-	print('5. Running MASH dist to get MASH distances')
+	print('6. Running MASH dist to get MASH distances')
 	output_file = open(out_dir + os.sep + 'mash_dist.tsv', 'w')
 	cmd = ['mash', 'dist', out_dir + os.sep+ 'mash_sketch.msh', out_dir + os.sep+ 'mash_sketch.msh']
 	torun = subprocess.Popen(cmd, stdout=output_file, stderr=subprocess.PIPE)
@@ -292,7 +293,6 @@ def evaluate_mash_distances(out_dir):
 				coef = line[4].split("/")
 				prop.add(float(int(coef[0])/int(coef[1])))
 	for a in list(prop):
-		print(a)
 		if a > 0.95:
 			print('These two genomes are highly similar and might be clonal. Their MASH distance is %s' %(a))
 		else:
@@ -308,11 +308,8 @@ def create_gbk_from_isescan_out(out_dir):
 		os.mkdir(out_dir + os.sep + "tn_gbks")	
 	for sample in samples:
 		proteome_dir = out_dir + os.sep + 'ISEScan_out' + os.sep + sample + os.sep + 'proteome' + os.sep + out_dir
-		print(proteome_dir)
 		proteome_files = os.listdir(proteome_dir)
-		print(proteome_files)
 		genes = [f for f in proteome_files if '_tnp_contig.fa.ffn' in f][0]
-		print(genes)	
 		prots = [f for f in proteome_files if '_tnp_contig.fa.faa' in f][0]
 		is_dir = out_dir + os.sep + 'ISEScan_out' + os.sep + sample + os.sep + out_dir
 		if os.path.isdir(is_dir):
@@ -382,10 +379,8 @@ def run_clinker(out_dir):
 	gbks = os.listdir(out_dir + os.sep + 'tn_gbks')
 	inp = out_dir + '/tn_gbks/*'
 	cmd = 'clinker '  + inp + ' -p '+ output_file1 + ' -o ' + output_file2
-	print(cmd)
 	torun = subprocess.Popen([cmd], stderr=subprocess.PIPE, shell=True)
 	err = torun.communicate()
-	print(err)
 
 if __name__ == '__main__' :
 	fa1 = sys.argv[1]
