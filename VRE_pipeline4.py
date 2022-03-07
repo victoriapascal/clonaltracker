@@ -23,15 +23,18 @@ def check_input_is_fasta(fasta):
 			check = False
 	return check
 
-def run_blastn(db, out_dir, fasta, use):
+def run_blastn(db, out_f, fasta):
 	'''Run blastn on any given fatsa sequence using the van gene DB'''
 	fa = fasta.split('/')[-1]
 	print('1. Running blastn for %s...' %(fa))
-	output_file = open(out_dir + os.sep + 'blastn_' + str(use) + "_" + str(fa), 'w')
+	output_file = open(out_f, 'w')
+	#output_file = open(out_dir + os.sep + 'blastn_' + str(use) + "_" + str(fa), 'w')
 	#db = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/van_type_DB/van_nuc_seq_repre.fa'
 	cmd = ['blastn', '-query', str(fasta), '-db', db, '-outfmt', '6', '-evalue', '1e-10']
+	print(' '.join(cmd))
 	torun = subprocess.Popen(cmd, stdout=output_file, stderr=subprocess.PIPE)
 	out, err = torun.communicate()
+	print(err)
 	output_file.close()
 
 
@@ -224,12 +227,12 @@ def run_isescan(out_dir):
 	Run isescan to assess potential tnp IS
 	'''
 	print("4. Running ISEScan to predict ISs")
-	is_out = output_dir + os.sep + "ISEScan_out"
+	is_out = output_dir + os.sep + "ISEScan_trim"
 	if not os.path.isdir(is_out):
 		os.mkdir(is_out)
-	contigf = [file for file in os.listdir(out_dir) if "_tnp_contig.fa" in file]
+	contigf = [file for file in os.listdir(out_dir) if "_tnp_trimmed.fa" in file]
 	for cf in contigf:
-		od = cf.replace("_tnp_contig.fa", '')
+		od = cf.replace("_tnp_trimmed.fa", '')
 		cmd = ['isescan.py', '--seqfile', out_dir + os.sep+ cf, '--output', is_out + os.sep + od]
 		torun = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		out, err = torun.communicate()
@@ -241,9 +244,9 @@ def parse_isescan_output(out_dir):
 	samples_id = {}
 	samples = out_dir.split('_')[2].split('-')
 	for sample in samples:
-		folders = os.listdir(out_dir + os.sep + "ISEScan_out/" + sample)
+		folders = os.listdir(out_dir + os.sep + "ISEScan_trim/" + sample)
 		if out_dir in folders:
-			root = out_dir + os.sep + "ISEScan_out/" + sample 
+			root = out_dir + os.sep + "ISEScan_trim/" + sample 
 			table = [file for file in os.listdir(root + os.sep + out_dir) if file.endswith('.tsv')]
 			samples_id[sample] = []
 			with open(root + os.sep + out_dir + os.sep + table[0], 'r') as f:
@@ -303,19 +306,19 @@ def create_gbk_from_isescan_out(out_dir):
 	From ISEScan ISs, ORFs and gene predictions build a genbank find to use it as input for clinker
 	'''
 	
-	samples = os.listdir(out_dir + os.sep + 'ISEScan_out')
-	if not os.path.isdir(out_dir + os.sep + "tn_gbks"):
-		os.mkdir(out_dir + os.sep + "tn_gbks")	
+	samples = os.listdir(out_dir + os.sep + 'ISEScan_trim')
+	if not os.path.isdir(out_dir + os.sep + "tn_trim_gbks"):
+		os.mkdir(out_dir + os.sep + "tn_trim_gbks")	
 	for sample in samples:
-		proteome_dir = out_dir + os.sep + 'ISEScan_out' + os.sep + sample + os.sep + 'proteome' + os.sep + out_dir
+		proteome_dir = out_dir + os.sep + 'ISEScan_trim' + os.sep + sample + os.sep + 'proteome' + os.sep + out_dir
 		proteome_files = os.listdir(proteome_dir)
-		genes = [f for f in proteome_files if '_tnp_contig.fa.ffn' in f][0]
-		prots = [f for f in proteome_files if '_tnp_contig.fa.faa' in f][0]
-		is_dir = out_dir + os.sep + 'ISEScan_out' + os.sep + sample + os.sep + out_dir
+		genes = [f for f in proteome_files if '_tnp_trimmed.fa.ffn' in f][0]
+		prots = [f for f in proteome_files if '_tnp_trimmed.fa.faa' in f][0]
+		is_dir = out_dir + os.sep + 'ISEScan_trim' + os.sep + sample + os.sep + out_dir
 		if os.path.isdir(is_dir):
 			is_files = os.listdir(is_dir)
-			is_nuc = [f for f in is_files if '_tnp_contig.fa.is.fna' in f][0]
-			is_prot = [f for f in is_files if '_tnp_contig.fa.orf.faa' in f][0] 	
+			is_nuc = [f for f in is_files if '_tnp_trimmed.fa.is.fna' in f][0]
+			is_prot = [f for f in is_files if '_tnp_trimmed.fa.orf.faa' in f][0] 	
 		
 		records = {}
 		##genes with transposon
@@ -345,7 +348,7 @@ def create_gbk_from_isescan_out(out_dir):
   					isp_index = isp.index(i)
   					records[i.strip()].append(isp[isp_index+1].strip())
 		
-		contigs = out_dir + os.sep + sample + '_tnp_contig.fa'
+		contigs = out_dir + os.sep + sample + '_tnp_trimmed.fa'
 		header = []
 		seq = []
 		with open(contigs, 'r') as fasta:
@@ -367,20 +370,98 @@ def create_gbk_from_isescan_out(out_dir):
 			my_feature.qualifiers['translation'] = records[i][0]
 			record.features.append(my_feature)
 
-		with open(out_dir + os.sep + 'tn_gbks/' + sample + '.gb', 'w') as input_handle:
+		with open(out_dir + os.sep + 'tn_trim_gbks/' + sample + '.gb', 'w') as input_handle:
 			SeqIO.write(record, input_handle, "genbank")
 def run_clinker(out_dir):
 	'''
 	From the the tn gbk files, run clincker to visualize the similarities/differences between the isolates transposons
 	'''
 
-	output_file1 =  out_dir + os.sep + 'clinker_tn_viz.html'
-	output_file2 = out_dir + os.sep + 'clinker_tn_msa.aln'
-	gbks = os.listdir(out_dir + os.sep + 'tn_gbks')
-	inp = out_dir + '/tn_gbks/*'
-	cmd = 'clinker '  + inp + ' -p '+ output_file1 + ' -o ' + output_file2
+	output_file1 =  out_dir + os.sep + 'clinker_tn_trim_viz.html'
+	output_file2 = out_dir + os.sep + 'clinker_tn_trim_msa.aln'
+	gbks = os.listdir(out_dir + os.sep + 'tn_trim_gbks')
+	inp = out_dir + '/tn_trim_gbks/*'
+	cmd = 'clinker '  + inp + ' -p '+ output_file1 + ' -o ' + output_file2 + ' -i ' + '0.01'
+	print(cmd) 
 	torun = subprocess.Popen([cmd], stderr=subprocess.PIPE, shell=True)
 	err = torun.communicate()
+	print(err)
+
+def trim_tnp_region(blast_tn, contig_fasta, out_tn):
+	'''
+	From the transposon blastn extract the tn coordinats and trim the transposon sequence
+	'''
+	seq_coords = {}	
+	with open(blast_tn, 'r') as f:
+		lines = f.readlines()
+		isolate = blast_tn.split('/')[-1].replace('blastn_tnp_', '').replace('.fasta', '')
+		if len(lines) == 1:
+			contig = lines[0].split('\t')[0]
+			start = int(lines[0].split('\t')[6])
+			end = int(lines[0].split('\t')[7])
+			seq_coords[isolate] = [contig, start, end]
+		else:
+			seq_coords[isolate] = []
+			hits = []
+			length = [int(item.split('\t')[7]) - int(item.split('\t')[6]) for item in lines]
+			for l in length:
+				if l> 1000:
+					index_c = length.index(l)
+					line = lines[index_c].split('\t')
+					hit = [line[0], line[6], line[7]]
+					hits.append(hit)
+			contigs = [a[0] for a in hits]
+			if len(set(contigs)) ==1: ##if there are more than two contigs involved
+				start = [int(a[1]) for a in hits]
+				end = [int(a[2]) for a in hits]
+				seq_coords[isolate] = [contigs[0], min(start), max(end)]
+			else:
+				length_contigs = [int(item.split('\t')[2]) - int(item[1]) for item in contigs]
+				longest = max(length_contigs, key=abs) #get longest hit
+				index_l = length_contigs.index(longest)
+				seq_coords[isolate] = contigs[index_l]	
+
+
+	##trim the sequence
+	iso = contig_fasta.split('/')[-1].replace('_tnp_contig.fa', '')
+	with open(contig_fasta, 'r') as f:
+		records = f.readlines()
+		for r in records:
+			if r.startswith(">") and seq_coords[iso][0] in r:
+				header = records.index(r)
+				region = records[header + 1][seq_coords[iso][1]:seq_coords[iso][2]]
+				out = out_tn
+				with open(out, 'w') as outf:
+					outf.write(r)
+					outf.write(region)
+
+
+def parse_alignment_scores(out_dir):
+	aln_scores = {}
+	genes = set()
+	selected_scores = []
+	selected_genes = set()
+	aln = [file for file in os.listdir(out_dir) if file.endswith('.aln')][0]
+	with open(out_dir + os.sep + aln, 'r') as f:
+		next(f)
+		next(f)
+		next(f)
+		for line in f:
+			lines = line.split("  ")
+			pair = lines[0] + '*' + lines[1]
+			genes.add(lines[0])
+			genes.add(lines[1])
+			iden = float(lines[2])
+			if iden > 0.3:
+				aln_scores[pair] = iden
+				selected_scores.append(iden)
+				selected_genes.add(lines[0])
+				selected_genes.add(lines[1])
+	
+	average = float(sum(selected_scores)/len(selected_scores))
+	considered_genes = len(list(selected_genes)) - len(list(genes))
+	return average, abs(considered_genes)
+	
 
 if __name__ == '__main__' :
 	fa1 = sys.argv[1]
@@ -403,9 +484,13 @@ if __name__ == '__main__' :
 #			list1.write(out1 + '\t' + fa1 + '\n')
 #			list1.write(out2 + '\t' + fa2)
 		#run blastn for both files
-		blast_db = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/van_type_DB/van_nuc_seq_repre.fa'
-		run_blastn(blast_db, output_dir, fa1, 'van')
-		run_blastn(blast_db, output_dir, fa2, 'van')
+		out_b1 = output_dir + '/blastn_' + 'van_' + str(fasta1)
+		print(out_b1)
+		DB = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/clonaltracker/van_representatives/'
+		blast_db = DB + 'van_type_DB/van_nuc_seq_repre.fa'
+		run_blastn(blast_db, out_b1, fa1)
+		out_b2 = output_dir + '/blastn_' + 'van_' + str(fasta2)
+		run_blastn(blast_db, out_b2, fa2)
 		#check both blastn outputs
 		records1= check_blastn_output(output_dir, fasta1)
 		records2 = check_blastn_output(output_dir, fasta2)
@@ -428,23 +513,38 @@ if __name__ == '__main__' :
 			result  = parse_tetyper_output(output_dir)
 			##Run isescan to check IS
 			num_contigs = get_contigs_seqs(output_dir)
-			run_ragtag(output_dir, num_contigs, van_type)	
+			run_ragtag(output_dir, num_contigs, van_type)
+			tn_db = [f for f in os.listdir(DB + 'tnp_db') if van_type in f][0].split('.')[0] + '.fa'
+			inf1 = output_dir + os.sep + fasta1.split('.')[0] + '_tnp_contig.fa'
+			out_t1 = output_dir + os.sep + 'blastn_tnp_' + fasta1	
+			run_blastn(DB + 'tnp_db/' + tn_db, out_t1, inf1)
+			inf2 = output_dir + os.sep + fasta2.split('.')[0] + '_tnp_contig.fa'
+			out_t2 = output_dir + os.sep + 'blastn_tnp_' + fasta2 
+			run_blastn(DB + 'tnp_db/' + tn_db, out_t2, inf2)
+			blast_tn_out = [f for f in os.listdir(output_dir) if 'blastn_tnp_' in f]
+			for b in blast_tn_out:
+				contig_fa = output_dir + os.sep + b.replace("blastn_tnp_", '').replace('.fasta', '') + '_tnp_contig.fa'
+				out_fa = output_dir + os.sep + b.replace('blastn_tnp_', '').replace('.fasta', '') + '_tnp_trimmed.fa'
+				trim_tnp_region(output_dir + os.sep + b, contig_fa, out_fa)
+				
 			run_isescan(output_dir)
 			identity = parse_isescan_output(output_dir)
 			create_gbk_from_isescan_out(output_dir)
-			ref_tn = [f for f in os.listdir('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/') if van_type in f and f.endswith(".gb")]
+			#ref_tn = [f for f in os.listdir(DB + '/tnp_db/') if van_type in f and f.endswith(".gb")]
 			##copy tnp reference gbk file
-			copyfile('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/' + ref_tn[0], output_dir + os.sep + 'tn_gbks/' + ref_tn[0])
+			#copyfile(DB + '/tnp_db/' + ref_tn[0], output_dir + os.sep + 'tn_gbks/' + ref_tn[0])
 			run_clinker(output_dir)
+			avg, num = parse_alignment_scores(output_dir)
 			assess_clonality_with_mash_sketch(output_dir, fa1, fa2)
 			assess_clonality_with_mash_dist(output_dir)
 
-			if result == True and identity == True: # if they have the same SNPs, deletions and ISs
+			if result == True and identity == True and avg >= 0.99 and num == 0: # if they have the same SNPs, deletions and ISs
 				#evaluate MASH output to assess clonality
+				print("The transposons of these two genomes seem to be identical")
 				evaluate_mash_distances(output_dir)
 			else:
-				print('The transposons of these two genomes are not identical')
-			
+				print('The transposons of these two genomes are not identical, average gene identity with gene identity > 0.3 is  %s, not considering %s genes for lack of similarity' %(avg, num))
+
 		else:
 			if not van_type == van_type2:
 				print('These two genomes are not the same van type, %s is %s and %s is %s' %(fasta1, van_type, fasta2, van_type2))
