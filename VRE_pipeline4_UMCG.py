@@ -178,8 +178,8 @@ def get_contigs_seqs(output_dir):
 					sample_contigs[name].append(line[0])
 	
 	##remove hard-coded path when the usual one is known
-	fna = '/hpc/dla_mm/vpascalandreu/data/vanB_fastas'	
-	#fna = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/bk_vanB_dataset_wget/202106102320_results/scaffolds/'	
+	#fna = '/hpc/dla_mm/vpascalandreu/data/vanB_fastas'	
+	fna = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/bk_vanB_dataset_wget/202106102320_results/scaffolds/'	
 	#fna = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
 	for a in sample_contigs.keys():
 		with open(fna + os.sep + a + '.fasta', 'r') as f2:
@@ -242,8 +242,7 @@ def parse_isescan_output(out_dir):
 	Check ISEScan output folder to see if the two genomes have the same (if any) IS
 	'''
 	samples_id = {}
-	#samples = out_dir.split('_')[2].split('-')
-	samples = [f.replace('_tnp_contig.fa', '') for f in os.listdir(out_dir) if 'tnp_contig.fa' in f and '.fai' not in f]
+	samples = out_dir.split('_')[2].split('-')
 	for sample in samples:
 		folders = os.listdir(out_dir + os.sep + "ISEScan_trim/" + sample)
 		if out_dir in folders:
@@ -402,30 +401,26 @@ def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 			end = int(lines[0].split('\t')[7])
 			seq_coords[isolate] = [contig, start, end]
 		else:
-			contig_coords = {}
-			for line in lines:
-				line = line.split('\t')
-				c = line[0]
-				if c in contig_coords.keys():
-					contig_coords[c].append(int(line[6]))
-					contig_coords[c].append(int(line[7]))
-				else:	
-					contig_coords[c] = []
-					contig_coords[c].append(int(line[6]))
-					contig_coords[c].append(int(line[7]))
-			c_l = 0
-			win_c = ''
-			print(contig_coords)
-			for contig, coords in contig_coords.items():
-				start = min(coords)
-				end = max(coords)
-				length = abs(end -start)
-				if length > c_l:
-					c_l = length
-					win_c = contig
-			seq_coords[isolate] = [win_c, min(contig_coords[win_c]), max(contig_coords[win_c])]
+			seq_coords[isolate] = []
+			hits = []
+			length = [int(item.split('\t')[7]) - int(item.split('\t')[6]) for item in lines]
+			for l in length:
+				if l> 1000:
+					index_c = length.index(l)
+					line = lines[index_c].split('\t')
+					hit = [line[0], line[6], line[7]]
+					hits.append(hit)
+			contigs = [a[0] for a in hits]
+			if len(set(contigs)) ==1: ##if there are more than two contigs involved
+				start = [int(a[1]) for a in hits]
+				end = [int(a[2]) for a in hits]
+				seq_coords[isolate] = [contigs[0], min(start), max(end)]
+			else:
+				length_contigs = [int(item[2]) - int(item[1]) for item in hits]
+				longest = max(length_contigs, key=abs) #get longest hit
+				index_l = length_contigs.index(longest)
+				seq_coords[isolate] = hits[index_l]	
 
-	print(seq_coords)
 	##trim the sequence
 	iso = contig_fasta.split('/')[-1].replace('_tnp_contig.fa', '')
 	with open(contig_fasta, 'r') as f:
