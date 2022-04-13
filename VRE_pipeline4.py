@@ -95,9 +95,9 @@ def run_tetyper(fasta, out_dir, type_pident):
 	print('3. Running TETyper to assess transposon type')
 	#location_reads = "/".join(fasta.split('/')[:-1]) + '/'
 	#location_reads = '/hpc/dla_mm/vpascalandreu/data/vanA_raw_reads/vanA_reads/'
-	location_reads = '/hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2/'
+	#location_reads = '/hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2/'
 	#location_reads = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
-	#location_reads = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/vanB_dataset_wget/'
+	location_reads = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/vanB_dataset_wget/'
 	sample = fasta.split('/')[-1].split('.')[0] + "_"
 	fq1 = [file for file in os.listdir(location_reads) if 'R1.fastq.gz' in file and sample in file][0]
 	fq2 = [file for file in os.listdir(location_reads) if 'R2.fastq.gz' in file and sample in file][0]
@@ -137,7 +137,7 @@ def parse_tetyper_output(output_dir):
 				lines = line.strip().split('\t')
 				snps[name].append(lines[0])
 				snps[name].append(lines[2])
-				snps[name].append(lines[3])
+#				snps[name].append(lines[3])
 
 	result = ''
 	if set(snps[names[0]]) == set(snps[names[1]]):
@@ -145,20 +145,6 @@ def parse_tetyper_output(output_dir):
 	else:
 		result = False
 	
-	with open('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/tnp_db.pickle', 'rb') as handle:
-		tnp_db = pickle.load(handle)
-	with open('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/tn_nomenclature.pickle', 'rb') as handle2:
-		tn_nomen = pickle.load(handle2)
-	
-	snp1 = '-'.join(snps[names[0]])
-	snp2 = '-'.join(snps[names[1]])
-	if snp1 in tnp_db.keys():
-		print(names[0] + " has the transposon type " + tn_nomen[snp1] + ", the same transposon as " + ','.join(tnp_db[snp1]))
-
-	if snp2 in tnp_db.keys():
-                print(names[1] + " has the transposon type " + tn_nomen[snp2] + ", the same transposon as " + ','.join(tnp_db[snp2]))
-
-
 	return result
 
 def get_contigs_seqs(output_dir):
@@ -179,7 +165,7 @@ def get_contigs_seqs(output_dir):
 	
 	##remove hard-coded path when the usual one is known
 	fna = '/hpc/dla_mm/vpascalandreu/data/vanB_fastas'	
-	#fna = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/bk_vanB_dataset_wget/202106102320_results/scaffolds/'	
+	#fna = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/bk_vanB_dataset_wget/202106102320_results/scaffolds'	
 	#fna = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
 	for a in sample_contigs.keys():
 		with open(fna + os.sep + a + '.fasta', 'r') as f2:
@@ -218,7 +204,7 @@ def run_ragtag(output_dir, sample_contigs, van_type):
 						header = ">" + sample + "_contig" + str(num) + "_ragtag" + '\n'
 						f2.write(header)
 					else:
-						f2.write(line)
+						f2.write(line.replace("N", ""))
 						  
 					
 				
@@ -383,10 +369,8 @@ def run_clinker(out_dir):
 	gbks = os.listdir(out_dir + os.sep + 'tn_trim_gbks')
 	inp = out_dir + '/tn_trim_gbks/*'
 	cmd = 'clinker '  + inp + ' -p '+ output_file1 + ' -o ' + output_file2 + ' -i ' + '0.01'
-	print(cmd) 
 	torun = subprocess.Popen([cmd], stderr=subprocess.PIPE, shell=True)
 	err = torun.communicate()
-	print(err)
 
 def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 	'''
@@ -415,7 +399,6 @@ def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 					contig_coords[c].append(int(line[7]))
 			c_l = 0
 			win_c = ''
-			print(contig_coords)
 			for contig, coords in contig_coords.items():
 				start = min(coords)
 				end = max(coords)
@@ -425,7 +408,6 @@ def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 					win_c = contig
 			seq_coords[isolate] = [win_c, min(contig_coords[win_c]), max(contig_coords[win_c])]
 
-	print(seq_coords)
 	##trim the sequence
 	iso = contig_fasta.split('/')[-1].replace('_tnp_contig.fa', '')
 	with open(contig_fasta, 'r') as f:
@@ -466,6 +448,29 @@ def parse_alignment_scores(out_dir):
 	considered_genes = len(list(selected_genes)) - len(list(genes))
 	return average, abs(considered_genes)
 	
+def compare_tn_sequence_with_DB(out_dir):
+	'''
+	Compare the trimmed transposon sequence to the vanAB DB ones
+	'''
+	tn_seqs = [f for f in os.listdir(out_dir) if '_tnp_trimmed' in f and f.endswith('.fa')]
+	
+	##load tn DB
+	with open('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/clonaltracker/van_representatives/tnp_db/tnp_db.pickle', 'rb') as handle:
+                tnp_db = pickle.load(handle)
+
+	with open('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/clonaltracker/van_representatives/tnp_db/tnp_nomen.pickle', 'rb') as handle2:
+                tn_nomen = pickle.load(handle2)
+	
+	for t in tn_seqs:
+		iso = t.replace('_tnp_trimmed.fa', '')
+		with open(out_dir + os.sep + t, 'r') as f:
+			for line in f:
+				if not line.startswith('>'):
+					seq = line.strip()
+					comp = [a for a in tnp_db.keys() if seq == a]	
+					if comp:
+						print('Isolate %s has the transposon type %s, also found in isolate %s' %(iso, tn_nomen[seq], ', '.join(tnp_db[seq])))
+
 
 def makeblastdb(out_dir):
 	'''
@@ -490,7 +495,7 @@ def parse_tnp_synteny(out_dir):
 		coords = set()
 		for line in lines:
 			line = line.split('\t')
-			iden = line[2]
+			iden = float(line[2])
 			start1 = line[6]
 			end1 = line[7]
 			start2 = line[8]
@@ -499,8 +504,7 @@ def parse_tnp_synteny(out_dir):
 			coords.add(start2)
 			coords.add(end1)
 			coords.add(end2)
-			print(coords, len(list(coords)))
-			if iden == 100 and len(list(coords)) == 2:
+			if iden == 100.000 and len(list(coords)) == 2:
 				print('These transposons are identical')
 				return True
 			else:
@@ -523,15 +527,14 @@ if __name__ == '__main__' :
 	check1 = check_input_is_fasta(fa1)
 	check2 = check_input_is_fasta(fa2)
 	if check1 == True and check2 == True: ##if both files are fasta
-		#copy files for poppunk analysis
-#		copyfile(fa1, output_dir + os.sep + fasta1)
-#		copyfile(fa2, output_dir + os.sep + fasta2)
-#		with open(output_dir + os.sep + 'list_new_genomes.txt', 'w') as list1:
-#			list1.write(out1 + '\t' + fa1 + '\n')
-#			list1.write(out2 + '\t' + fa2)
+		##copy files for poppunk analysis
+		#copyfile(fa1, output_dir + os.sep + fasta1)
+		#copyfile(fa2, output_dir + os.sep + fasta2)
+		with open(output_dir + os.sep + 'list_new_genomes.txt', 'w') as list1:
+			list1.write(out1 + '\t' + fa1 + '\n')
+			list1.write(out2 + '\t' + fa2)
 		#run blastn for both files
 		out_b1 = output_dir + '/blastn_' + 'van_' + str(fasta1)
-		print(out_b1)
 		DB = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/clonaltracker/van_representatives/'
 		blast_db = DB + 'van_type_DB/van_nuc_seq_repre.fa'
 		run_blastn(blast_db, out_b1, fa1)
@@ -545,7 +548,7 @@ if __name__ == '__main__' :
 		van_type = ', '.join([a.split('_')[-1] for a in records1.keys()])
 		van_type2 = ', '.join([a.split('_')[-1] for a in records2.keys()])
 		#run poppunk analysis
-#		ppdb = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/vanAB_dataset_poppunk'
+		#ppdb = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/vanAB_dataset_poppunk'
 		#destination = shutil.copytree(ppdb, output_dir + os.sep + 'vanAB_dataset')
 		#poppunk_folder = 'vanAB_dataset'
 		#run_poppunk(output_dir + os.sep + 'list_new_genomes.txt', poppunk_folder, output_dir)
@@ -559,6 +562,7 @@ if __name__ == '__main__' :
 			##Run isescan to check IS
 			num_contigs = get_contigs_seqs(output_dir)
 			run_ragtag(output_dir, num_contigs, van_type)
+			tnp_db = [f for f in os.listdir(DB + 'tnp_db') if van_type in f]
 			tn_db = [f for f in os.listdir(DB + 'tnp_db') if van_type in f][0].split('.')[0] + '.fa'
 			inf1 = output_dir + os.sep + fasta1.split('.')[0] + '_tnp_contig.fa'
 			out_t1 = output_dir + os.sep + 'blastn_tnp_' + fasta1	
@@ -566,6 +570,7 @@ if __name__ == '__main__' :
 			inf2 = output_dir + os.sep + fasta2.split('.')[0] + '_tnp_contig.fa'
 			out_t2 = output_dir + os.sep + 'blastn_tnp_' + fasta2 
 			run_blastn(DB + 'tnp_db/' + tn_db, out_t2, inf2)
+			compare_tn_sequence_with_DB(output_dir)
 			blast_tn_out = [f for f in os.listdir(output_dir) if 'blastn_tnp_' in f]
 			for b in blast_tn_out:
 				contig_fa = output_dir + os.sep + b.replace("blastn_tnp_", '').replace('.fasta', '') + '_tnp_contig.fa'
@@ -576,13 +581,13 @@ if __name__ == '__main__' :
 			tnp_query = output_dir + os.sep + [file.replace('_tnp_contig.fa', '') for file in os.listdir(output_dir) if '_tnp_contig.fa' in file and not '.fai' in file][1] +'_tnp_trimmed.fa'
 			out_t3 = output_dir + os.sep + 'blastn_comp_tn_' + fasta2
 			run_blastn(tnp_ref_db,out_t3, tnp_query)
-			run_isescan(output_dir)
+			#run_isescan(output_dir)
 			identity = parse_isescan_output(output_dir)
-			create_gbk_from_isescan_out(output_dir)
-			#ref_tn = [f for f in os.listdir(DB + '/tnp_db/') if van_type in f and f.endswith(".gb")]
+			#create_gbk_from_isescan_out(output_dir)
+			ref_tn = [f for f in os.listdir(DB + '/tnp_db/') if van_type in f and f.endswith(".gb")]
 			##copy tnp reference gbk file
 			#copyfile(DB + '/tnp_db/' + ref_tn[0], output_dir + os.sep + 'tn_gbks/' + ref_tn[0])
-			run_clinker(output_dir)
+			#run_clinker(output_dir)
 			avg, num = parse_alignment_scores(output_dir)
 			assess_clonality_with_mash_sketch(output_dir, fa1, fa2)
 			assess_clonality_with_mash_dist(output_dir)
