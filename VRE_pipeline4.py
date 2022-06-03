@@ -95,9 +95,9 @@ def run_tetyper(fasta, out_dir, type_pident):
 	print('3. Running TETyper to assess transposon type')
 	#location_reads = "/".join(fasta.split('/')[:-1]) + '/'
 	#location_reads = '/hpc/dla_mm/vpascalandreu/data/vanA_raw_reads/vanA_reads/'
-	#location_reads = '/hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2/'
+	location_reads = '/hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2/'
 	#location_reads = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
-	location_reads = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/vanB_dataset_wget/'
+	#location_reads = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/vanB_dataset_wget/'
 	sample = fasta.split('/')[-1].split('.')[0] + "_"
 	fq1 = [file for file in os.listdir(location_reads) if 'R1.fastq.gz' in file and sample in file][0]
 	fq2 = [file for file in os.listdir(location_reads) if 'R2.fastq.gz' in file and sample in file][0]
@@ -266,7 +266,7 @@ def assess_clonality_with_mash_sketch(out_dir, fasta, fasta2):
 def assess_clonality_with_mash_dist(out_dir):
 
 	print('6. Running MASH dist to get MASH distances')
-	output_file = open(out_dir + os.sep + 'mash_dist.tsv', 'w')
+	output_file = open(out_dir + os.sep + 'mash_dist.txt', 'w')
 	cmd = ['mash', 'dist', out_dir + os.sep+ 'mash_sketch.msh', out_dir + os.sep+ 'mash_sketch.msh']
 	torun = subprocess.Popen(cmd, stdout=output_file, stderr=subprocess.PIPE)
 	out, err = torun.communicate()
@@ -512,6 +512,40 @@ def parse_tnp_synteny(out_dir):
 	else:
 		return False
 		
+def create_output_html(out_dir):
+	output_folder = out_dir
+	van_blast = [f for f in os.listdir(output_folder) if 'blastn_van_' in f]
+	samples = [f.replace('blastn_van_', '').replace('.txt', '') for f in van_blast]
+	tnp_blast = [f for f in os.listdir(output_folder) if 'blastn_comp' in f]
+	mash = [f for f in os.listdir(output_folder) if 'mash_dist.txt' in f][0]
+
+
+	with open(output_folder + os.sep + 'results.html', 'w') as out:
+		out.write('<!DOCTYPE html>' + '\n' +'<html>' + '\n')
+		out.write('<h2 style="font-family:arial">ClonalTracker output results for genomes ' + samples[0] + ' and ' + samples[1] + '</h2>' + '\n')
+		out.write('<p style="font-family:arial"><b>1. <i>van</i> typing results using blastN:</b></p>'+ '\n')
+		out.write('<p style="font-family:arial"> - ' + van_blast[0] + '\n')
+		out.write('    <p><iframe src="' + output_folder + os.sep + van_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+		out.write('<p style="font-family:arial"> - ' + van_blast[1] + '\n')
+		out.write('    <p><iframe src="' + output_folder + os.sep + van_blast[1] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+		if 'TETyper_out' in os.listdir(output_folder):
+			tetyper = [f for f in os.listdir(output_folder + os.sep + 'TETyper_out') if 'summary' in f]
+			out.write('<p style="font-family:arial"><b>2. Transposon typing results</b></p>'+ '\n')
+			out.write('<p style="font-family:arial">2.1 TETyper results:</p>'+ '\n')
+			out.write('<p style="font-family:arial"> - ' + tetyper[0] + '\n')
+			out.write('    <p><iframe src="' + output_folder + os.sep + 'TETyper_out/' + tetyper[0] + '" frameborder="0" height="80" width="100%" /></iframe></p>' + '\n')
+			out.write('<p style="font-family:arial"> - ' + tetyper[1] + '\n')
+			out.write('    <p><iframe src="' + output_folder + os.sep + 'TETyper_out/' + tetyper[1] + '" frameborder="0" height="80" width="100%" /></iframe></p>' + '\n')
+			out.write('<p style="font-family:arial">2.2 Clinker results after running RagTag (if needed to scaffold the transposon contigs) & ISEScan:</p>'+ '\n')
+			out.write('    <p><iframe src="' + output_folder + os.sep + 'clinker_tn_trim_viz.html' + '" frameborder="0" width=1000 height=800" /></iframe></p>' + '\n')
+			out.write('<p style="font-family:arial">2.3 blastN results to check the synteny of both transposons:</p>'+ '\n')
+			out.write('    <p><iframe src="' + output_folder + os.sep + tnp_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+		if mash:
+			out.write('<p style="font-family:arial"><b>3. Whole genome comparison using Mash:</b></p>'+ '\n')
+			out.write('    <p><iframe src="' + output_folder + os.sep + mash + '" frameborder="0" height="90" width="100%" /></iframe></p>' + '\n')
+
+		out.write('</html>')
+
 
 if __name__ == '__main__' :
 	fa1 = sys.argv[1]
@@ -581,17 +615,18 @@ if __name__ == '__main__' :
 			tnp_query = output_dir + os.sep + [file.replace('_tnp_contig.fa', '') for file in os.listdir(output_dir) if '_tnp_contig.fa' in file and not '.fai' in file][1] +'_tnp_trimmed.fa'
 			out_t3 = output_dir + os.sep + 'blastn_comp_tn_' + fasta2
 			run_blastn(tnp_ref_db,out_t3, tnp_query)
-			#run_isescan(output_dir)
+			run_isescan(output_dir)
 			identity = parse_isescan_output(output_dir)
-			#create_gbk_from_isescan_out(output_dir)
+			create_gbk_from_isescan_out(output_dir)
 			ref_tn = [f for f in os.listdir(DB + '/tnp_db/') if van_type in f and f.endswith(".gb")]
 			##copy tnp reference gbk file
 			#copyfile(DB + '/tnp_db/' + ref_tn[0], output_dir + os.sep + 'tn_gbks/' + ref_tn[0])
-			#run_clinker(output_dir)
+			run_clinker(output_dir)
 			avg, num = parse_alignment_scores(output_dir)
 			assess_clonality_with_mash_sketch(output_dir, fa1, fa2)
 			assess_clonality_with_mash_dist(output_dir)
 			synteny = parse_tnp_synteny(output_dir)
+			create_output_html(output_dir)
 			if result == True and identity == True and avg >= 0.99 and num == 0 and synteny == True: # if they have the same SNPs, deletions and ISs
 				#evaluate MASH output to assess clonality
 				print("The transposons of these two genomes seem to be identical")
@@ -600,6 +635,7 @@ if __name__ == '__main__' :
 				print('The transposons of these two genomes are not identical, average gene identity with gene identity > 0.3 is  %s, not considering %s genes for lack of similarity' %(avg, num))
 
 		else:
+			create_output_html(output_dir)
 			if not van_type == van_type2:
 				print('These two genomes are not the same van type, %s is %s and %s is %s' %(fasta1, van_type, fasta2, van_type2))
 			elif not van_type or not van_type2:
