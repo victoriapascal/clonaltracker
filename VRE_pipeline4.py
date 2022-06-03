@@ -90,14 +90,9 @@ def run_poppunk(list_genomes, poppunk_db, out_dir):
 		print(err3)
 	os.chdir(cwd)
 
-def run_tetyper(fasta, out_dir, type_pident):
+def run_tetyper(fasta, out_dir, type_pident, location_reads):
 	'''Running TETyper to assess transposon type'''
 	print('3. Running TETyper to assess transposon type')
-	#location_reads = "/".join(fasta.split('/')[:-1]) + '/'
-	#location_reads = '/hpc/dla_mm/vpascalandreu/data/vanA_raw_reads/vanA_reads/'
-	location_reads = '/hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2/'
-	#location_reads = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
-	#location_reads = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/vanB_dataset_wget/'
 	sample = fasta.split('/')[-1].split('.')[0] + "_"
 	fq1 = [file for file in os.listdir(location_reads) if 'R1.fastq.gz' in file and sample in file][0]
 	fq2 = [file for file in os.listdir(location_reads) if 'R2.fastq.gz' in file and sample in file][0]
@@ -550,6 +545,7 @@ def create_output_html(out_dir):
 if __name__ == '__main__' :
 	fa1 = sys.argv[1]
 	fa2 = sys.argv[2]
+	loc_reads = sys.argv[3]
 	fasta1 = fa1.split('/')[-1]
 	fasta2 = fa2.split('/')[-1]
 	out1 = '.'.join(fasta1.split(".")[0:-1])
@@ -590,8 +586,8 @@ if __name__ == '__main__' :
 		if van_type_set == van_type2_set: ##if both genomes have the same van type
 			print('The two genomes are %s type' %(van_type))	
 			##run tetyper
-			#run_tetyper(fa1, output_dir, records1)
-			#run_tetyper(fa2, output_dir, records2)
+			run_tetyper(fa1, output_dir, records1, loc_reads)
+			run_tetyper(fa2, output_dir, records2, loc_reads)
 			result  = parse_tetyper_output(output_dir)
 			##Run isescan to check IS
 			num_contigs = get_contigs_seqs(output_dir)
