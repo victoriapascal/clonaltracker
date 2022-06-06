@@ -1,16 +1,13 @@
 import sys
 import subprocess
 import os
-from Bio import SeqIO, SeqFeature
+from Bio import SeqIO
 from Bio.Seq import Seq
-from BCBio import GFF
 from Bio.SeqRecord import SeqRecord
-#from Bio.Alphabet import IUPAC
 from Bio.SeqFeature import SeqFeature, FeatureLocation
-from Bio.Align.Applications import ClustalwCommandline
 from shutil import copyfile
 import shutil
-import pickle
+import pickle5 as pickle
 
 def check_input_is_fasta(fasta):
 	'''Checks that the input is a valid nucleotide fasta sequence'''
@@ -142,7 +139,7 @@ def parse_tetyper_output(output_dir):
 	
 	return result
 
-def get_contigs_seqs(output_dir):
+def get_contigs_seqs(output_dir,fna):
 	'''
 	From the TETyper blast output, get the transposons that align with the transposon
 	'''
@@ -158,10 +155,6 @@ def get_contigs_seqs(output_dir):
 				if not line[0] in sample_contigs[name]:
 					sample_contigs[name].append(line[0])
 	
-	##remove hard-coded path when the usual one is known
-	fna = '/hpc/dla_mm/vpascalandreu/data/vanB_fastas'	
-	#fna = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/bk_vanB_dataset_wget/202106102320_results/scaffolds'	
-	#fna = '/hpc/dla_mm/vpascalandreu/data/new_outbreak_assemblies_vrefidia/'
 	for a in sample_contigs.keys():
 		with open(fna + os.sep + a + '.fasta', 'r') as f2:
 			lines = f2.readlines()
@@ -589,8 +582,9 @@ if __name__ == '__main__' :
 			run_tetyper(fa1, output_dir, records1, loc_reads)
 			run_tetyper(fa2, output_dir, records2, loc_reads)
 			result  = parse_tetyper_output(output_dir)
+			loc_fastas = '/'.join(fa1.split('/')[:-1])
 			##Run isescan to check IS
-			num_contigs = get_contigs_seqs(output_dir)
+			num_contigs = get_contigs_seqs(output_dir, loc_fastas)
 			run_ragtag(output_dir, num_contigs, van_type)
 			tnp_db = [f for f in os.listdir(DB + 'tnp_db') if van_type in f]
 			tn_db = [f for f in os.listdir(DB + 'tnp_db') if van_type in f][0].split('.')[0] + '.fa'
