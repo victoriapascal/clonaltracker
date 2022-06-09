@@ -65,6 +65,6 @@ conda activate ct_env
 	- Fasta files should be in the same folder
 	- Raw reads of both isolates should be in the same folder, and contain the *_R1.fastq.gz *_R2.fastq.gz suffix
 ```
-python clonaltracker/VRE_pipeline4.py /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7314.fasta /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7317.fasta /hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2/
+python clonaltracker/clonaltracker.py /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7314.fasta /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7317.fasta /hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2/
 ```
 
