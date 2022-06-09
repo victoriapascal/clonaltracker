@@ -7,7 +7,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from shutil import copyfile
 import shutil
-import pickle5 as pickle
+import pickle
+#import pickle5 as pickle
 
 def check_input_is_fasta(fasta):
 	'''Checks that the input is a valid nucleotide fasta sequence'''
@@ -25,13 +26,9 @@ def run_blastn(db, out_f, fasta):
 	fa = fasta.split('/')[-1]
 	print('1. Running blastn for %s...' %(fa))
 	output_file = open(out_f, 'w')
-	#output_file = open(out_dir + os.sep + 'blastn_' + str(use) + "_" + str(fa), 'w')
-	#db = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/van_type_DB/van_nuc_seq_repre.fa'
 	cmd = ['blastn', '-query', str(fasta), '-db', db, '-outfmt', '6', '-evalue', '1e-10']
-	print(' '.join(cmd))
 	torun = subprocess.Popen(cmd, stdout=output_file, stderr=subprocess.PIPE)
 	out, err = torun.communicate()
-	print(err)
 	output_file.close()
 
 
@@ -78,7 +75,6 @@ def run_poppunk(list_genomes, poppunk_db, out_dir):
 	cmd3 = ['poppunk_visualise', '--ref-db', 'vanAB_dataset_updated', '--output', 'vanAB_dataset_updated/microreact_viz', '--microreact']
 	torun3 = subprocess.Popen(cmd3, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	out3, err3= torun3.communicate()
-	print(' '.join(cmd2))
 	if err:
 		print(err)
 	if err2:
@@ -96,12 +92,13 @@ def run_tetyper(fasta, out_dir, type_pident, location_reads):
 	#fq1 = [file for file in os.listdir(location_reads) if '_R1_val_1.fq' in file and sample in file][0]
 	#fq2 = [file for file in os.listdir(location_reads) if '_R2_val_2.fq' in file and sample in file][0]
 	tnp_ref = ''
+	script_dir = os.path.abspath( os.path.dirname( __file__ ))
 	for a in type_pident.keys():
 		if "vanA" in a:
-			tnp_ref = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/vanA_M97297.fa'
+			tnp_ref = script_dir + os.sep + 'van_representatives/tnp_db/vanA_M97297.fa'
 		else:
 			if "vanB" in a:
-				tnp_ref = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/vanB_AY655721.2.fa'
+				tnp_ref = script_dir + os.sep + 'van_representatives/tnp_db/vanB_AY655721.fa'
 	if not os.path.isdir(out_dir + os.sep + 'TETyper_out'):
 		os.mkdir(out_dir + os.sep + 'TETyper_out')
 	else:
@@ -172,9 +169,10 @@ def run_ragtag(output_dir, sample_contigs, van_type):
 	Run ragtag to scaffold contig only when the transposon is found split in more than one contigs	
 	'''
 	for sample, contigs in sample_contigs.items():
+		script_dir = os.path.abspath( os.path.dirname( __file__ ))
 		if len(contigs) > 1: ## when there the tnp is split into multiple contigs, run ragtag
 			out = output_dir + os.sep + sample + "_ragtag"
-			ref_tn = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/' + [f for f in os.listdir('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/van_representatives/tnp_db/') if van_type in f and f.endswith(".fa")][0]
+			ref_tn = script_dir + os.sep +'van_representatives/tnp_db/' + [f for f in os.listdir(script_dir + os.sep + 'van_representatives/tnp_db/') if van_type in f and f.endswith(".fa")][0]
 			query = output_dir + os.sep + [f for f in os.listdir(output_dir) if sample in f and '_tnp_contig.fa' in f][0]
 			cmd = ['ragtag.py', 'scaffold','-o', out, ref_tn, query]
 			torun = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.PIPE)			
@@ -443,10 +441,11 @@ def compare_tn_sequence_with_DB(out_dir):
 	tn_seqs = [f for f in os.listdir(out_dir) if '_tnp_trimmed' in f and f.endswith('.fa')]
 	
 	##load tn DB
-	with open('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/clonaltracker/van_representatives/tnp_db/tnp_db.pickle', 'rb') as handle:
+	script_dir = os.path.abspath( os.path.dirname( __file__ ))
+	with open(script_dir + os.sep + 'van_representatives/tnp_db/tnp_db.pickle', 'rb') as handle:
                 tnp_db = pickle.load(handle)
 
-	with open('/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/clonaltracker/van_representatives/tnp_db/tnp_nomen.pickle', 'rb') as handle2:
+	with open(script_dir + os.sep + 'van_representatives/tnp_db/tnp_nomen.pickle', 'rb') as handle2:
                 tn_nomen = pickle.load(handle2)
 	
 	for t in tn_seqs:
@@ -558,7 +557,8 @@ if __name__ == '__main__' :
 			list1.write(out2 + '\t' + fa2)
 		#run blastn for both files
 		out_b1 = output_dir + '/blastn_' + 'van_' + str(fasta1)
-		DB = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/clonaltracker/van_representatives/'
+		script_dir = os.path.abspath( os.path.dirname( __file__ ))
+		DB = script_dir + os.sep + 'van_representatives/'
 		blast_db = DB + 'van_type_DB/van_nuc_seq_repre.fa'
 		run_blastn(blast_db, out_b1, fa1)
 		out_b2 = output_dir + '/blastn_' + 'van_' + str(fasta2)
