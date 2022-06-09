@@ -571,10 +571,10 @@ if __name__ == '__main__' :
 		van_type = ', '.join([a.split('_')[-1] for a in records1.keys()])
 		van_type2 = ', '.join([a.split('_')[-1] for a in records2.keys()])
 		#run poppunk analysis
-		#ppdb = '/hpc/dla_mm/vpascalandreu/VRE_pipeline_validation/pipeline/vanAB_dataset_poppunk'
-		#destination = shutil.copytree(ppdb, output_dir + os.sep + 'vanAB_dataset')
-		#poppunk_folder = 'vanAB_dataset'
-		#run_poppunk(output_dir + os.sep + 'list_new_genomes.txt', poppunk_folder, output_dir)
+		ppdb = script_dir + os.sep + 'vanAB_dataset_poppunk'
+		destination = shutil.copytree(ppdb, output_dir + os.sep + 'vanAB_dataset')
+		poppunk_folder = 'vanAB_dataset'
+		run_poppunk(output_dir + os.sep + 'list_new_genomes.txt', poppunk_folder, output_dir)
 		
 		if van_type_set == van_type2_set: ##if both genomes have the same van type
 			print('The two genomes are %s type' %(van_type))	
