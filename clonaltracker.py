@@ -153,7 +153,8 @@ def get_contigs_seqs(output_dir,fna):
 					sample_contigs[name].append(line[0])
 	
 	for a in sample_contigs.keys():
-		with open(fna + os.sep + a + '.fasta', 'r') as f2:
+		sample = [f for f in os.listdir(fna) if a in f][0]
+		with open(fna + os.sep + sample, 'r') as f2:
 			lines = f2.readlines()
 			out = open(output_dir + os.sep + a + "_tnp_contig.fa", 'w')
 			for c in sample_contigs[a]:
@@ -261,7 +262,7 @@ def assess_clonality_with_mash_dist(out_dir):
 def evaluate_mash_distances(out_dir):
 	sim = set()
 	prop = set()
-	with open(out_dir + os.sep +'mash_dist.tsv', 'r') as out:
+	with open(out_dir + os.sep +'mash_dist.txt', 'r') as out:
 		for line in out:
 			line = line.strip().split('\t')
 			if not line[0] == line[1]:
@@ -365,7 +366,7 @@ def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 	seq_coords = {}	
 	with open(blast_tn, 'r') as f:
 		lines = f.readlines()
-		isolate = blast_tn.split('/')[-1].replace('blastn_tnp_', '').replace('.fasta', '')
+		isolate = blast_tn.split('/')[-1].replace('blastn_tnp_', '').replace('.fasta', '').replace('.fna', '').replace('.fa', '')
 		if len(lines) == 1:
 			contig = lines[0].split('\t')[0]
 			start = int(lines[0].split('\t')[6])
@@ -583,6 +584,7 @@ if __name__ == '__main__' :
 			run_tetyper(fa2, output_dir, records2, loc_reads)
 			result  = parse_tetyper_output(output_dir)
 			loc_fastas = '/'.join(fa1.split('/')[:-1])
+			print(loc_fastas)
 			##Run isescan to check IS
 			num_contigs = get_contigs_seqs(output_dir, loc_fastas)
 			run_ragtag(output_dir, num_contigs, van_type)
@@ -597,8 +599,8 @@ if __name__ == '__main__' :
 			compare_tn_sequence_with_DB(output_dir)
 			blast_tn_out = [f for f in os.listdir(output_dir) if 'blastn_tnp_' in f]
 			for b in blast_tn_out:
-				contig_fa = output_dir + os.sep + b.replace("blastn_tnp_", '').replace('.fasta', '') + '_tnp_contig.fa'
-				out_fa = output_dir + os.sep + b.replace('blastn_tnp_', '').replace('.fasta', '') + '_tnp_trimmed.fa'
+				contig_fa = output_dir + os.sep + b.replace("blastn_tnp_", '').replace('.fna', '').replace('.fasta', '').replace('.fa', '') + '_tnp_contig.fa'
+				out_fa = output_dir + os.sep + b.replace('blastn_tnp_', '').replace('.fna', '').replace('.fasta', '').replace('fa', '') + '_tnp_trimmed.fa'
 				trim_tnp_region(output_dir + os.sep + b, contig_fa, out_fa)
 			makeblastdb(output_dir)
 			tnp_ref_db = output_dir + os.sep + [file.replace('_tnp_contig.fa', '') for file in os.listdir(output_dir) if '_tnp_contig.fa' in file][0] + '_tnp_trimmed.fa'
