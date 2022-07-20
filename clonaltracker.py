@@ -140,23 +140,26 @@ def get_contigs_seqs(output_dir,fna):
 	'''
 	From the TETyper blast output, get the transposons that align with the transposon
 	'''
-	files = output_dir + os.sep + 'TETyper_out/'
-	bf = [f for f in os.listdir(files) if 'blast' in f]
+	#files = output_dir + os.sep + 'TETyper_out/'
+	bf = [f for f in os.listdir(output_dir) if 'contig' in f]
 	sample_contigs = {}
 	for b in bf:
-		name = b.replace('_blast.txt', '')
+		name = b.replace('blast_contigs_', '').replace('.fasta', '').replace('.fa', '').replace('.fna', '')
 		sample_contigs[name] = []
-		with open(files + os.sep + b, 'r') as f1:
+		with open(output_dir + os.sep + b, 'r') as f1:
 			for line in f1:
 				line = line.strip().split('\t')
 				if not line[0] in sample_contigs[name]:
 					sample_contigs[name].append(line[0])
 	
 	for a in sample_contigs.keys():
-		sample = [f for f in os.listdir(fna) if a in f][0]
+		print(a)
+		sample = [f for f in os.listdir(fna) if a + '.f' in f][0]
+		print(sample)
 		with open(fna + os.sep + sample, 'r') as f2:
 			lines = f2.readlines()
 			out = open(output_dir + os.sep + a + "_tnp_contig.fa", 'w')
+			header = ''
 			for c in sample_contigs[a]:
 				header = '>' + c + '\n'
 				index = lines.index(header)
@@ -174,7 +177,9 @@ def run_ragtag(output_dir, sample_contigs, van_type):
 		if len(contigs) > 1: ## when there the tnp is split into multiple contigs, run ragtag
 			out = output_dir + os.sep + sample + "_ragtag"
 			ref_tn = script_dir + os.sep +'van_representatives/tnp_db/' + [f for f in os.listdir(script_dir + os.sep + 'van_representatives/tnp_db/') if van_type in f and f.endswith(".fa")][0]
-			query = output_dir + os.sep + [f for f in os.listdir(output_dir) if sample in f and '_tnp_contig.fa' in f][0]
+			isolate = sample + '_tnp_contig.fa'
+			query = output_dir + os.sep + isolate
+			#query = output_dir + os.sep + [f for f in os.listdir(output_dir) if sample in f and '_tnp_contig.fa' in f][0]
 			cmd = ['ragtag.py', 'scaffold','-o', out, ref_tn, query]
 			torun = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.PIPE)			
 			out1, err = torun.communicate()
@@ -519,14 +524,14 @@ def create_output_html(out_dir):
 		if 'TETyper_out' in os.listdir(output_folder):
 			tetyper = [f for f in os.listdir(output_folder + os.sep + 'TETyper_out') if 'summary' in f]
 			out.write('<p style="font-family:arial"><b>2. Transposon typing results</b></p>'+ '\n')
-			out.write('<p style="font-family:arial">2.1 TETyper results:</p>'+ '\n')
-			out.write('<p style="font-family:arial"> - ' + tetyper[0] + '\n')
-			out.write('    <p><iframe src="' + output_folder + os.sep + 'TETyper_out/' + tetyper[0] + '" frameborder="0" height="80" width="100%" /></iframe></p>' + '\n')
-			out.write('<p style="font-family:arial"> - ' + tetyper[1] + '\n')
-			out.write('    <p><iframe src="' + output_folder + os.sep + 'TETyper_out/' + tetyper[1] + '" frameborder="0" height="80" width="100%" /></iframe></p>' + '\n')
-			out.write('<p style="font-family:arial">2.2 Clinker results after running RagTag (if needed to scaffold the transposon contigs) & ISEScan:</p>'+ '\n')
+			#out.write('<p style="font-family:arial">2.1 TETyper results:</p>'+ '\n')
+			#out.write('<p style="font-family:arial"> - ' + tetyper[0] + '\n')
+			#out.write('    <p><iframe src="' + output_folder + os.sep + 'TETyper_out/' + tetyper[0] + '" frameborder="0" height="80" width="100%" /></iframe></p>' + '\n')
+			#out.write('<p style="font-family:arial"> - ' + tetyper[1] + '\n')
+			#out.write('    <p><iframe src="' + output_folder + os.sep + 'TETyper_out/' + tetyper[1] + '" frameborder="0" height="80" width="100%" /></iframe></p>' + '\n')
+			out.write('<p style="font-family:arial">2.1 Clinker results after running RagTag (if needed to scaffold the transposon contigs) & ISEScan:</p>'+ '\n')
 			out.write('    <p><iframe src="' + output_folder + os.sep + 'clinker_tn_trim_viz.html' + '" frameborder="0" width=1000 height=800" /></iframe></p>' + '\n')
-			out.write('<p style="font-family:arial">2.3 blastN results to check the synteny of both transposons:</p>'+ '\n')
+			out.write('<p style="font-family:arial">2.2 blastN results to check the synteny of both transposons:</p>'+ '\n')
 			out.write('    <p><iframe src="' + output_folder + os.sep + tnp_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
 		if mash:
 			out.write('<p style="font-family:arial"><b>3. Whole genome comparison using Mash:</b></p>'+ '\n')
@@ -572,17 +577,23 @@ if __name__ == '__main__' :
 		van_type = ', '.join([a.split('_')[-1] for a in records1.keys()])
 		van_type2 = ', '.join([a.split('_')[-1] for a in records2.keys()])
 		#run poppunk analysis
-		ppdb = script_dir + os.sep + 'vanAB_dataset_poppunk'
-		destination = shutil.copytree(ppdb, output_dir + os.sep + 'vanAB_dataset')
-		poppunk_folder = 'vanAB_dataset'
-		run_poppunk(output_dir + os.sep + 'list_new_genomes.txt', poppunk_folder, output_dir)
+	#	ppdb = script_dir + os.sep + 'vanAB_dataset_poppunk'
+	#	destination = shutil.copytree(ppdb, output_dir + os.sep + 'vanAB_dataset')
+	#	poppunk_folder = 'vanAB_dataset'
+	#	run_poppunk(output_dir + os.sep + 'list_new_genomes.txt', poppunk_folder, output_dir)
 		
 		if van_type_set == van_type2_set: ##if both genomes have the same van type
-			print('The two genomes are %s type' %(van_type))	
+			print('The two genomes are %s type' %(van_type))
+			tnp_ref = [f for f in os.listdir(DB + 'tnp_db') if van_type in f and f.endswith('.fa')][0]
+			tnp_db = DB + 'tnp_db' + os.sep + tnp_ref
+			out_blast_tnp1 = output_dir + '/blast_contigs_' + str(fasta1)
+			out_blast_tnp2 = output_dir + '/blast_contigs_' + str(fasta2)
+			run_blastn(tnp_db, out_blast_tnp1, fa1)
+			run_blastn(tnp_db, out_blast_tnp2, fa2)
 			##run tetyper
-			run_tetyper(fa1, output_dir, records1, loc_reads)
-			run_tetyper(fa2, output_dir, records2, loc_reads)
-			result  = parse_tetyper_output(output_dir)
+			#run_tetyper(fa1, output_dir, records1, loc_reads)
+			#run_tetyper(fa2, output_dir, records2, loc_reads)
+			#result  = parse_tetyper_output(output_dir)
 			loc_fastas = '/'.join(fa1.split('/')[:-1])
 			print(loc_fastas)
 			##Run isescan to check IS
@@ -619,7 +630,7 @@ if __name__ == '__main__' :
 			assess_clonality_with_mash_dist(output_dir)
 			synteny = parse_tnp_synteny(output_dir)
 			create_output_html(output_dir)
-			if result == True and identity == True and avg >= 0.99 and num == 0 and synteny == True: # if they have the same SNPs, deletions and ISs
+			if identity == True and avg >= 0.99 and num == 0 and synteny == True: # if they have the same SNPs, deletions and ISs
 				#evaluate MASH output to assess clonality
 				print("The transposons of these two genomes seem to be identical")
 				evaluate_mash_distances(output_dir)
