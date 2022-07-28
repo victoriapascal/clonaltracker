@@ -543,7 +543,7 @@ def create_output_html(out_dir):
 if __name__ == '__main__' :
 	fa1 = sys.argv[1]
 	fa2 = sys.argv[2]
-	loc_reads = sys.argv[3]
+	loc_reads = '/'.join(fa1.split('/')[0:-1])
 	fasta1 = fa1.split('/')[-1]
 	fasta2 = fa2.split('/')[-1]
 	out1 = '.'.join(fasta1.split(".")[0:-1])
