@@ -27,38 +27,33 @@ conda activate ct_env
 
 - Run ClonalTracker
 	- Fasta files should be in the same folder
-	- Raw reads of both isolates should be in the same folder, and contain the *_R1.fastq.gz *_R2.fastq.gz suffix
+	- Path where to find both fasta files
 ```
-python clonaltracker/clonaltracker.py /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7314.fasta /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7317.fasta /hpc/dla_mm/vpascalandreu/data/vanB_raw_reads_renamed2/
+python clonaltracker/clonaltracker.py /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7314.fasta /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7317.fasta /hpc/dla_mm/vpascalandreu/data/vanB_fastas/ 
 ```
 
 ## Under-the-hood
 
 ### Input
 
-ClonalTracker expects two paired-end fastq files and a corresponding assembly (generated with e.g. SPAdes)
+ClonalTracker expects two assembled genomes as input (generated with e.g. SPAdes)
 
 ### Workflow
 
 ClonalTracker runs the following tools:
 - Blastn to detect the van type
-- TETyper, ISEScan, Clinker and BlastN for transposon typing
 - PopPUNK and MASH for whole genome comparison and contextualization in a larger dataset.
+- Blastn, RagTag, ISEScan and Clinker to do transposon typing
 
-Depending on the computational resources, ClonalTracker will take around 20 minutes to complete.
+Depending on the computational resources, ClonalTracker will take around 10 minutes to complete.
 
 ### Output
 
-...
+ClonalTracker outputs all the results and intermidiate files the different tools produce, which include interactive clinker HTML output, summary HTML file, log file, FASTA sequences...
 
 ## Test data
 
 ..
-
-## Command line options
-
-
-Description of the command-line arguments 
 
 ## Citation
 
