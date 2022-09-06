@@ -18,6 +18,42 @@ git clone https://gitlab.com/victoriapascal/clonaltracker.git
 conda env create -f clonaltracker/ct_env.yml ct_env
 ```
 
+- Install all the dependencies one by one. First create a new conda environment:
+
+```
+conda create -n ct_env
+```
+
+```
+conda activate ct_env
+```
+
+Then, install all the dependencies:
+
+```
+conda install poppunk==2.4.0
+```
+
+```
+conda install pp-sketchlib==1.7.4
+```
+
+```
+conda install -c bioconda isescan
+```
+
+```
+conda install -c bioconda ragtag
+```
+
+```
+conda install -c bioconda clinker-py
+```
+
+```
+conda install -c bioconda mash
+```
+
 ## How to run ClonaTracker
 
 - Activate your environment
@@ -29,7 +65,7 @@ conda activate ct_env
 	- Fasta files should be in the same folder
 	- Path where to find both fasta files
 ```
-python clonaltracker/clonaltracker.py /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7314.fasta /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7317.fasta /hpc/dla_mm/vpascalandreu/data/vanB_fastas/ 
+python clonaltracker/clonaltracker.py /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7314.fasta /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7317.fasta  
 ```
 
 ## Under-the-hood
