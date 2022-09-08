@@ -153,9 +153,7 @@ def get_contigs_seqs(output_dir,fna):
 					sample_contigs[name].append(line[0])
 	
 	for a in sample_contigs.keys():
-		print(a)
 		sample = [f for f in os.listdir(fna) if a + '.f' in f][0]
-		print(sample)
 		with open(fna + os.sep + sample, 'r') as f2:
 			lines = f2.readlines()
 			out = open(output_dir + os.sep + a + "_tnp_contig.fa", 'w')
@@ -370,18 +368,28 @@ def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 	'''
 	seq_coords = {}	
 	with open(blast_tn, 'r') as f:
+		print(blast_tn)
 		lines = f.readlines()
 		isolate = blast_tn.split('/')[-1].replace('blastn_tnp_', '').replace('.fasta', '').replace('.fna', '').replace('.fa', '')
 		if len(lines) == 1:
 			contig = lines[0].split('\t')[0]
 			start = int(lines[0].split('\t')[6])
 			end = int(lines[0].split('\t')[7])
-			seq_coords[isolate] = [contig, start, end]
+			start_s = int(lines[0].split('\t')[8]) #start of the subject alignment to check strand
+			end_s = int(lines[0].split('\t')[9])
+			if start_s > end_s:
+				seq_coords[isolate] = [contig, start, end, 'reverse']
+			else:
+				seq_coords[isolate] = [contig, start, end, 'same']
 		else:
 			contig_coords = {}
+			contig_ori = {}
 			for line in lines:
 				line = line.split('\t')
 				c = line[0]
+				start_s = int(lines[0].split('\t')[8])
+				end_s = int(lines[0].split('\t')[9])                       
+				contig_ori[c] = [start_s, end_s]
 				if c in contig_coords.keys():
 					contig_coords[c].append(int(line[6]))
 					contig_coords[c].append(int(line[7]))
@@ -398,8 +406,13 @@ def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 				if length > c_l:
 					c_l = length
 					win_c = contig
-			seq_coords[isolate] = [win_c, min(contig_coords[win_c]), max(contig_coords[win_c])]
-
+	
+		#	seq_coords[isolate] = [win_c, min(contig_coords[win_c]), max(contig_coords[win_c])]
+			if int(contig_ori[win_c][0]) > int(contig_ori[win_c][1]):
+				seq_coords[isolate] = [win_c, min(contig_coords[win_c]), max(contig_coords[win_c]), 'reverse']
+			else:
+				seq_coords[isolate] = [win_c, min(contig_coords[win_c]), max(contig_coords[win_c]), 'same']
+	
 	##trim the sequence
 	iso = contig_fasta.split('/')[-1].replace('_tnp_contig.fa', '')
 	with open(contig_fasta, 'r') as f:
@@ -407,11 +420,20 @@ def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 		for r in records:
 			if r.startswith(">") and seq_coords[iso][0] in r:
 				header = records.index(r)
-				region = records[header + 1][int(seq_coords[iso][1]):int(seq_coords[iso][2])]
+				print(seq_coords)
+				#region = records[header + 1][int(seq_coords[iso][1]):int(seq_coords[iso][2])]
 				out = out_tn
 				with open(out, 'w') as outf:
-					outf.write(r)
-					outf.write(region)
+					#outf.write(r)
+					if seq_coords[iso][3] == 'reverse':
+						region = records[header + 1][int(seq_coords[iso][1] +1):int(seq_coords[iso][2] -1)]
+						outf.write(r.strip() + '_reversed' + '\n')
+						seq = Seq(region)
+						outf.write(str(seq.reverse_complement()))
+					else:
+						region = records[header + 1][int(seq_coords[iso][1]):int(seq_coords[iso][2])]
+						outf.write(r)
+						outf.write(region)
 
 
 def parse_alignment_scores(out_dir):
@@ -480,6 +502,7 @@ def parse_tnp_synteny(out_dir):
 	'''
 	Parse the output file blasting one transposon to the other
 	'''
+
 	blast_out = [file for file in os.listdir(out_dir) if '_comp_tn_' in file][0]
 	lines = []
 	with open(out_dir + os.sep + blast_out, 'r') as f:
@@ -497,7 +520,8 @@ def parse_tnp_synteny(out_dir):
 			coords.add(start2)
 			coords.add(end1)
 			coords.add(end2)
-			if iden == 100.000 and len(list(coords)) == 2:
+			alen = line[3] ##alignment length
+			if iden == 100.000 and len(list(coords)) == 2 and alen == end1 and alen == end2:
 				print('These transposons are identical')
 				return True
 			else:
@@ -511,31 +535,24 @@ def create_output_html(out_dir):
 	samples = [f.replace('blastn_van_', '').replace('.txt', '') for f in van_blast]
 	tnp_blast = [f for f in os.listdir(output_folder) if 'blastn_comp' in f]
 	mash = [f for f in os.listdir(output_folder) if 'mash_dist.txt' in f][0]
-
-
 	with open(output_folder + os.sep + 'results.html', 'w') as out:
 		out.write('<!DOCTYPE html>' + '\n' +'<html>' + '\n')
 		out.write('<h2 style="font-family:arial">ClonalTracker output results for genomes ' + samples[0] + ' and ' + samples[1] + '</h2>' + '\n')
 		out.write('<p style="font-family:arial"><b>1. <i>van</i> typing results using blastN:</b></p>'+ '\n')
 		out.write('<p style="font-family:arial"> - ' + van_blast[0] + '\n')
-		out.write('    <p><iframe src="' + output_folder + os.sep + van_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+		out.write('    <p><iframe src="' + van_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
 		out.write('<p style="font-family:arial"> - ' + van_blast[1] + '\n')
-		out.write('    <p><iframe src="' + output_folder + os.sep + van_blast[1] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
-		if 'TETyper_out' in os.listdir(output_folder):
-			tetyper = [f for f in os.listdir(output_folder + os.sep + 'TETyper_out') if 'summary' in f]
+		out.write('    <p><iframe src="' +  van_blast[1] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+		if 'ISEScan_trim' in os.listdir(output_folder):
 			out.write('<p style="font-family:arial"><b>2. Transposon typing results</b></p>'+ '\n')
-			#out.write('<p style="font-family:arial">2.1 TETyper results:</p>'+ '\n')
-			#out.write('<p style="font-family:arial"> - ' + tetyper[0] + '\n')
-			#out.write('    <p><iframe src="' + output_folder + os.sep + 'TETyper_out/' + tetyper[0] + '" frameborder="0" height="80" width="100%" /></iframe></p>' + '\n')
-			#out.write('<p style="font-family:arial"> - ' + tetyper[1] + '\n')
-			#out.write('    <p><iframe src="' + output_folder + os.sep + 'TETyper_out/' + tetyper[1] + '" frameborder="0" height="80" width="100%" /></iframe></p>' + '\n')
-			out.write('<p style="font-family:arial">2.1 Clinker results after running RagTag (if needed to scaffold the transposon contigs) & ISEScan:</p>'+ '\n')
-			out.write('    <p><iframe src="' + output_folder + os.sep + 'clinker_tn_trim_viz.html' + '" frameborder="0" width=1000 height=800" /></iframe></p>' + '\n')
+			out.write('<p style="font-family:arial">Clinker results after running RagTag (if needed to scaffold the transposon contigs) & ISEScan.</p>'+ '\n')
+			out.write('<p style="font-family:arial">Sequence comparison at the proteome level:</p>'+ '\n')
+			out.write('    <p><iframe src="' +  'clinker_tn_trim_viz.html' + '" frameborder="0" width=1000 height=800" /></iframe></p>' + '\n')
 			out.write('<p style="font-family:arial">2.2 blastN results to check the synteny of both transposons:</p>'+ '\n')
-			out.write('    <p><iframe src="' + output_folder + os.sep + tnp_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+			out.write('    <p><iframe src="' +  tnp_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
 		if mash:
 			out.write('<p style="font-family:arial"><b>3. Whole genome comparison using Mash:</b></p>'+ '\n')
-			out.write('    <p><iframe src="' + output_folder + os.sep + mash + '" frameborder="0" height="90" width="100%" /></iframe></p>' + '\n')
+			out.write('    <p><iframe src="' + mash + '" frameborder="0" height="90" width="100%" /></iframe></p>' + '\n')
 
 		out.write('</html>')
 
@@ -577,10 +594,10 @@ if __name__ == '__main__' :
 		van_type = ', '.join([a.split('_')[-1] for a in records1.keys()])
 		van_type2 = ', '.join([a.split('_')[-1] for a in records2.keys()])
 		#run poppunk analysis
-		ppdb = script_dir + os.sep + 'vanAB_dataset_poppunk'
-		destination = shutil.copytree(ppdb, output_dir + os.sep + 'vanAB_dataset')
-		poppunk_folder = 'vanAB_dataset'
-		run_poppunk(output_dir + os.sep + 'list_new_genomes.txt', poppunk_folder, output_dir)
+		#ppdb = script_dir + os.sep + 'vanAB_dataset_poppunk'
+		#destination = shutil.copytree(ppdb, output_dir + os.sep + 'vanAB_dataset')
+		#poppunk_folder = 'vanAB_dataset'
+		#run_poppunk(output_dir + os.sep + 'list_new_genomes.txt', poppunk_folder, output_dir)
 		
 		if van_type_set == van_type2_set: ##if both genomes have the same van type
 			print('The two genomes are %s type' %(van_type))
@@ -595,7 +612,8 @@ if __name__ == '__main__' :
 			#run_tetyper(fa2, output_dir, records2, loc_reads)
 			#result  = parse_tetyper_output(output_dir)
 			loc_fastas = '/'.join(fa1.split('/')[:-1])
-			print(loc_fastas)
+			if loc_fastas == '':
+				loc_fastas = '.'
 			##Run isescan to check IS
 			num_contigs = get_contigs_seqs(output_dir, loc_fastas)
 			run_ragtag(output_dir, num_contigs, van_type)
@@ -616,6 +634,7 @@ if __name__ == '__main__' :
 			makeblastdb(output_dir)
 			tnp_ref_db = output_dir + os.sep + [file.replace('_tnp_contig.fa', '') for file in os.listdir(output_dir) if '_tnp_contig.fa' in file][0] + '_tnp_trimmed.fa'
 			tnp_query = output_dir + os.sep + [file.replace('_tnp_contig.fa', '') for file in os.listdir(output_dir) if '_tnp_contig.fa' in file and not '.fai' in file][1] +'_tnp_trimmed.fa'
+			
 			out_t3 = output_dir + os.sep + 'blastn_comp_tn_' + fasta2
 			run_blastn(tnp_ref_db,out_t3, tnp_query)
 			run_isescan(output_dir)
@@ -630,6 +649,7 @@ if __name__ == '__main__' :
 			assess_clonality_with_mash_dist(output_dir)
 			synteny = parse_tnp_synteny(output_dir)
 			create_output_html(output_dir)
+			print(identity, avg, num, synteny)
 			if identity == True and avg >= 0.99 and num == 0 and synteny == True: # if they have the same SNPs, deletions and ISs
 				#evaluate MASH output to assess clonality
 				print("The transposons of these two genomes seem to be identical")
