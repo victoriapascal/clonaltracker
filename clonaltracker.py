@@ -426,12 +426,18 @@ def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 				with open(out, 'w') as outf:
 					#outf.write(r)
 					if seq_coords[iso][3] == 'reverse':
-						region = records[header + 1][int(seq_coords[iso][1] +1):int(seq_coords[iso][2] -1)]
+						region = records[header + 1][int(seq_coords[iso][1] -1):int(seq_coords[iso][2])]
+						print(int(seq_coords[iso][1]))
+						print(int(seq_coords[iso][2] +1))
+						print(int(seq_coords[iso][2] +1) - int(seq_coords[iso][1]))
 						outf.write(r.strip() + '_reversed' + '\n')
 						seq = Seq(region)
 						outf.write(str(seq.reverse_complement()))
 					else:
-						region = records[header + 1][int(seq_coords[iso][1]):int(seq_coords[iso][2])]
+						region = records[header + 1][int(seq_coords[iso][1] -1):int(seq_coords[iso][2])]
+						print(int(seq_coords[iso][1]))
+						print(int(seq_coords[iso][2] +1 ))
+						print(int(seq_coords[iso][2] +1 ) - int(seq_coords[iso][1]))
 						outf.write(r)
 						outf.write(region)
 
