@@ -627,8 +627,8 @@ if __name__ == '__main__' :
 	check2 = check_input_is_fasta(fa2)
 	if check1 == True and check2 == True: ##if both files are fasta
 		##copy files for poppunk analysis
-		#copyfile(fa1, output_dir + os.sep + fasta1)
-		#copyfile(fa2, output_dir + os.sep + fasta2)
+		copyfile(fa1, output_dir + os.sep + fasta1)
+		copyfile(fa2, output_dir + os.sep + fasta2)
 		with open(output_dir + os.sep + 'list_new_genomes.txt', 'w') as list1:
 			list1.write(out1 + '\t' + fa1 + '\n')
 			list1.write(out2 + '\t' + fa2)
@@ -648,10 +648,10 @@ if __name__ == '__main__' :
 		van_type = ', '.join([a.split('_')[-1] for a in records1.keys()])
 		van_type2 = ', '.join([a.split('_')[-1] for a in records2.keys()])
 		#run poppunk analysis
-		#ppdb = script_dir + os.sep + 'vanAB_dataset_poppunk'
-		#destination = shutil.copytree(ppdb, output_dir + os.sep + 'vanAB_dataset')
-		#poppunk_folder = 'vanAB_dataset'
-		#run_poppunk(output_dir + os.sep + 'list_new_genomes.txt', poppunk_folder, output_dir)
+		ppdb = script_dir + os.sep + 'vanAB_dataset_poppunk'
+		destination = shutil.copytree(ppdb, output_dir + os.sep + 'vanAB_dataset')
+		poppunk_folder = 'vanAB_dataset'
+		run_poppunk(output_dir + os.sep + 'list_new_genomes.txt', poppunk_folder, output_dir)
 		
 		if van_type_set == van_type2_set: ##if both genomes have the same van type
 			print('The two genomes are %s type' %(van_type))
