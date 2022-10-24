@@ -278,6 +278,8 @@ def evaluate_mash_distances(out_dir):
 		else:
 			print('These two genomes are unlikely to be clonal as their MASH distance is %s' %(a))
 
+	return list(prop)[0]
+
 def create_gbk_from_isescan_out(out_dir):
 	'''
 	From ISEScan ISs, ORFs and gene predictions build a genbank find to use it as input for clinker
@@ -535,32 +537,74 @@ def parse_tnp_synteny(out_dir):
 	else:
 		return False
 		
-def create_output_html(out_dir):
+def create_output_html(out_dir, average, considered_genes, match_1, syn, dist, van_gene):
 	output_folder = out_dir
 	van_blast = [f for f in os.listdir(output_folder) if 'blastn_van_' in f]
 	samples = [f.replace('blastn_van_', '').replace('.txt', '') for f in van_blast]
 	tnp_blast = [f for f in os.listdir(output_folder) if 'blastn_comp' in f]
 	mash = [f for f in os.listdir(output_folder) if 'mash_dist.txt' in f][0]
+	identity == False
+	if match_1 == True and float(average) >= 0.99 and int(considered_genes) == 0 and syn == True:
+		identity == True
+	header = 'Blastn output: query id (q), subject id (s), % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue and bit score'
+
 	with open(output_folder + os.sep + 'results.html', 'w') as out:
 		out.write('<!DOCTYPE html>' + '\n' +'<html>' + '\n')
 		out.write('<h2 style="font-family:arial">ClonalTracker output results for genomes ' + samples[0] + ' and ' + samples[1] + '</h2>' + '\n')
-		out.write('<p style="font-family:arial"><b>1. <i>van</i> typing results using blastN:</b></p>'+ '\n')
+		out.write('<p style="font-family:arial"><b>1. <i>van</i> typing results using Blastn:</b></p>'+ '\n')
+		out.write('<p style="font-family:arial">'+ header +'</p>'+ '\n')
 		out.write('<p style="font-family:arial"> - ' + van_blast[0] + '\n')
 		out.write('    <p><iframe src="' + van_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
 		out.write('<p style="font-family:arial"> - ' + van_blast[1] + '\n')
 		out.write('    <p><iframe src="' +  van_blast[1] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+		text = "Both isolates are {0}".format(van_gene)
+		out.write('<p style="font-family:arial">' + text + '\n')
 		if 'ISEScan_trim' in os.listdir(output_folder):
 			out.write('<p style="font-family:arial"><b>2. Transposon typing results</b></p>'+ '\n')
 			out.write('<p style="font-family:arial">Clinker results after running RagTag (if needed to scaffold the transposon contigs) & ISEScan.</p>'+ '\n')
 			out.write('<p style="font-family:arial">Sequence comparison at the proteome level:</p>'+ '\n')
 			out.write('    <p><iframe src="' +  'clinker_tn_trim_viz.html' + '" frameborder="0" width=1000 height=800" /></iframe></p>' + '\n')
-			out.write('<p style="font-family:arial">2.2 blastN results to check the synteny of both transposons:</p>'+ '\n')
+			out.write('<p style="font-family:arial">2.2 Blastn results to check the synteny of both transposons:</p>'+ '\n')
 			out.write('    <p><iframe src="' +  tnp_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+		if identity == True:
+			out.write('<p style="font-family:arial">The transposons of these two genomes seem to be identical</p>'+ '\n')
+		if identity == False:
+			message = 'The transposons of these two genomes are not identical, average gene identity with gene identity > 0.3 is  %s, not considering %s genes for lack of similarity' %(average, considered_genes)
+			out.write('<p style="font-family:arial">' + message + '</p>'+ '\n')
 		if mash:
 			out.write('<p style="font-family:arial"><b>3. Whole genome comparison using Mash:</b></p>'+ '\n')
+			out.write('<p style="font-family:arial">Mash output: Reference-ID, Query-ID, Mash-distance, P-value, and Matching-hashes (shared k-mers)</p>'+ '\n')
 			out.write('    <p><iframe src="' + mash + '" frameborder="0" height="90" width="100%" /></iframe></p>' + '\n')
+			if identity == True:
+				if float(dist) > 0.95:
+					mes = "These two isolates seem to be clonal as they share {0}% of the Mash k-mers".format(str(dist*100))
+					out.write('<p style="font-family:arial">' + mes + '</p>'+ '\n')
+				else:
+					mes = "These two isolates share the same transposon but not their genomic background ({0}% k-mers shared). Thus they are candidates of horizontal transmission.".format(str(dist*100))
+					out.write('<p style="font-family:arial">' + mes + '</p>'+ '\n')
+			else:
+				mes = "These two isolates share {0}% of the Mash k-mers".format(str(dist*100))
+				out.write('<p style="font-family:arial">' + mes + '</p>'+ '\n')
+
+			out.write('<p style="font-family:arial"> Isolates with identical transposons which share >95% of the k-mers are considered clonal candidates. Isolates which share <90% of the mash k-mers indicate a potential horizontal transmission of the <i>van</i> operon and isolates sharing between 90-95% k-mers are ambiguous cases.</p>'+ '\n')
 
 		out.write('</html>')
+
+def create_html_diff_vans(output_dir, van1, van2):
+    van_blast = [f for f in os.listdir(output_dir) if 'blastn_van_' in f]
+    samples = [f.replace('blastn_van_', '').replace('.fasta', '') for f in van_blast]
+    ##create regular HTML
+    with open(output_dir + os.sep + 'results.html', 'w') as out:
+        out.write('<!DOCTYPE html>' + '\n' +'<html>' + '\n')
+        out.write('<h2 style="font-family:arial">ClonalTracker output results for genomes ' + samples[0] + ' and ' + samples[1] + '</h2>' + '\n')
+        out.write('<p style="font-family:arial"><b>1. <i>van</i> typing results using Blastn:</b></p>'+ '\n')
+        out.write('<p style="font-family:arial">Blastn output: query id (q), subject id (s), % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue and bit score </p>'+ '\n')
+        out.write('<p style="font-family:arial"> - '+ van_blast[0] + '\n')
+        out.write('    <p><iframe src="' + van_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+        out.write('<p style="font-family:arial"> - ' + van_blast[1] + '\n')
+        out.write('    <p><iframe src="' +  van_blast[1] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+        text = "Isolate {0} is {1} and isolate {2} is {3}".format(samples[0], van1, samples[1], van2)
+        out.write('<p style="font-family:arial">' + text + '\n')
 
 
 if __name__ == '__main__' :
@@ -654,19 +698,23 @@ if __name__ == '__main__' :
 			assess_clonality_with_mash_sketch(output_dir, fa1, fa2)
 			assess_clonality_with_mash_dist(output_dir)
 			synteny = parse_tnp_synteny(output_dir)
-			create_output_html(output_dir)
+			#create_output_html(output_dir)
 			print(identity, avg, num, synteny)
 			if identity == True and avg >= 0.99 and num == 0 and synteny == True: # if they have the same SNPs, deletions and ISs
 				#evaluate MASH output to assess clonality
 				print("The transposons of these two genomes seem to be identical")
-				evaluate_mash_distances(output_dir)
+				dist = evaluate_mash_distances(output_dir)
+				create_output_html(output_dir, avg, num, identity, synteny, dist, van_type)
 			else:
+				dist = evaluate_mash_distances(output_dir)
+				create_output_html(output_dir, avg, num, identity, synteny, dist, van_type)
 				print('The transposons of these two genomes are not identical, average gene identity with gene identity > 0.3 is  %s, not considering %s genes for lack of similarity' %(avg, num))
 
 		else:
-			create_output_html(output_dir)
+			#create_output_html(output_dir)
 			if not van_type == van_type2:
 				print('These two genomes are not the same van type, %s is %s and %s is %s' %(fasta1, van_type, fasta2, van_type2))
+				create_html_diff_vans(output_dir, van_type, van_type2)
 			elif not van_type or not van_type2:
 				print('At least one of these genomes do not have a vancomycin-resistant gene')
 	else:
