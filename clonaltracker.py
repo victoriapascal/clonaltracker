@@ -603,6 +603,10 @@ def create_html_diff_vans(output_dir, van1, van2):
         out.write('    <p><iframe src="' + van_blast[0] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
         out.write('<p style="font-family:arial"> - ' + van_blast[1] + '\n')
         out.write('    <p><iframe src="' +  van_blast[1] + '" frameborder="0" height="40" width="100%" /></iframe></p>' + '\n')
+        if van1 == '':
+                van1 = 'None'
+        if van2 == '':
+                van2 = 'None'
         text = "Isolate {0} is {1} and isolate {2} is {3}".format(samples[0], van1, samples[1], van2)
         out.write('<p style="font-family:arial">' + text + '\n')
 
@@ -712,9 +716,9 @@ if __name__ == '__main__' :
 
 		else:
 			#create_output_html(output_dir)
+			create_html_diff_vans(output_dir, van_type, van_type2)
 			if not van_type == van_type2:
 				print('These two genomes are not the same van type, %s is %s and %s is %s' %(fasta1, van_type, fasta2, van_type2))
-				create_html_diff_vans(output_dir, van_type, van_type2)
 			elif not van_type or not van_type2:
 				print('At least one of these genomes do not have a vancomycin-resistant gene')
 	else:
