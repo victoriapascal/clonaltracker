@@ -358,11 +358,12 @@ def run_clinker(out_dir):
 
 	output_file1 =  out_dir + os.sep + 'clinker_tn_trim_viz.html'
 	output_file2 = out_dir + os.sep + 'clinker_tn_trim_msa.aln'
-	gbks = os.listdir(out_dir + os.sep + 'tn_trim_gbks')
-	inp = out_dir + '/tn_trim_gbks/*'
+	#gbks = os.listdir(out_dir + os.sep + 'tn_trim_gbks')
+	inp = out_dir + '/Bakta_out/*.gb*'
 	cmd = 'clinker '  + inp + ' -p '+ output_file1 + ' -o ' + output_file2 + ' -i ' + '0.01'
 	torun = subprocess.Popen([cmd], stderr=subprocess.PIPE, shell=True)
 	err = torun.communicate()
+	print(err)
 
 def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 	'''
@@ -429,17 +430,11 @@ def trim_tnp_region(blast_tn, contig_fasta, out_tn):
 					#outf.write(r)
 					if seq_coords[iso][3] == 'reverse':
 						region = records[header + 1][int(seq_coords[iso][1] -1):int(seq_coords[iso][2])]
-						print(int(seq_coords[iso][1]))
-						print(int(seq_coords[iso][2] +1))
-						print(int(seq_coords[iso][2] +1) - int(seq_coords[iso][1]))
 						outf.write(r.strip() + '_reversed' + '\n')
 						seq = Seq(region)
 						outf.write(str(seq.reverse_complement()))
 					else:
 						region = records[header + 1][int(seq_coords[iso][1] -1):int(seq_coords[iso][2])]
-						print(int(seq_coords[iso][1]))
-						print(int(seq_coords[iso][2] +1 ))
-						print(int(seq_coords[iso][2] +1 ) - int(seq_coords[iso][1]))
 						outf.write(r)
 						outf.write(region)
 
@@ -590,9 +585,11 @@ def create_output_html(out_dir, average, considered_genes, match_1, syn, dist, v
 
 		out.write('</html>')
 
-def create_html_diff_vans(output_dir, van1, van2):
+def create_html_diff_vans(output_dir, sample1, sample2, van1, van2):
     van_blast = [f for f in os.listdir(output_dir) if 'blastn_van_' in f]
     samples = [f.replace('blastn_van_', '').replace('.fasta', '') for f in van_blast]
+    s1 = sample1.replace('.fasta', '').replace('.fa', '').replace('.fna', '')
+    s2 = sample2.replace('.fasta', '').replace('.fa', '').replace('.fna', '')
     ##create regular HTML
     with open(output_dir + os.sep + 'results.html', 'w') as out:
         out.write('<!DOCTYPE html>' + '\n' +'<html>' + '\n')
@@ -607,13 +604,42 @@ def create_html_diff_vans(output_dir, van1, van2):
                 van1 = 'None'
         if van2 == '':
                 van2 = 'None'
-        text = "Isolate {0} is {1} and isolate {2} is {3}".format(samples[0], van1, samples[1], van2)
+        text = "Isolate {0} is {1} and isolate {2} is {3}".format(s1, van1, s2, van2)
         out.write('<p style="font-family:arial">' + text + '\n')
 
+def format_input_fasta(inf):
+	out_tmp = '.'.join(inf.split('.')[:-1]) + '_formatted.fa'
+	with open(inf, 'r') as f, open(out_tmp, 'w') as out:
+		block = []
+		for line in f:
+			if line.startswith('>'):
+				if block:
+					out.write(''.join(block) + '\n')
+					block = []
+				out.write(line.replace(' ', '_'))
+			else:
+				block.append(line.strip())
+		if block:
+			out.write(''.join(block) + '\n')
 
+def annotate_tnp_bakta(out_dir, bakta_db):
+	'''
+	Run Bakta to annotate the transposon sequences
+	'''
+	bakta_out = out_dir + os.sep + "Bakta_out"
+	if not os.path.isdir(bakta_out):
+		os.mkdir(bakta_out)
+	contigf = [file for file in os.listdir(out_dir) if '_tnp_trimmed.fa' in file and not '.fa.n' in file]
+	for cf in contigf:
+		od = cf.replace('_tnp_trimmed.fa', '')
+		cmd = ['bakta', '--db', bakta_db, '--output', bakta_out, out_dir + os.sep + cf]	
+		torun = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+		out, err = torun.communicate()
+	
 if __name__ == '__main__' :
 	fa1 = sys.argv[1]
 	fa2 = sys.argv[2]
+	bakta_db = sys.argv[3]
 	loc_reads = '/'.join(fa1.split('/')[0:-1])
 	fasta1 = fa1.split('/')[-1]
 	fasta2 = fa2.split('/')[-1]
@@ -691,19 +717,19 @@ if __name__ == '__main__' :
 			
 			out_t3 = output_dir + os.sep + 'blastn_comp_tn_' + fasta2
 			run_blastn(tnp_ref_db,out_t3, tnp_query)
+			annotate_tnp_bakta(output_dir, bakta_db)
 			run_isescan(output_dir)
 			identity = parse_isescan_output(output_dir)
-			create_gbk_from_isescan_out(output_dir)
+			#create_gbk_from_isescan_out(output_dir)
 			ref_tn = [f for f in os.listdir(DB + '/tnp_db/') if van_type in f and f.endswith(".gb")]
 			##copy tnp reference gbk file
-			#copyfile(DB + '/tnp_db/' + ref_tn[0], output_dir + os.sep + 'tn_gbks/' + ref_tn[0])
+			#copyfile(DB + '/tnp_db/' + ref_tn[0], output_dir + os.sep + 'Bakta_out/' + ref_tn[0])
 			run_clinker(output_dir)
 			avg, num = parse_alignment_scores(output_dir)
 			assess_clonality_with_mash_sketch(output_dir, fa1, fa2)
 			assess_clonality_with_mash_dist(output_dir)
 			synteny = parse_tnp_synteny(output_dir)
 			#create_output_html(output_dir)
-			print(identity, avg, num, synteny)
 			if identity == True and avg >= 0.99 and num == 0 and synteny == True: # if they have the same SNPs, deletions and ISs
 				#evaluate MASH output to assess clonality
 				print("The transposons of these two genomes seem to be identical")
@@ -716,7 +742,7 @@ if __name__ == '__main__' :
 
 		else:
 			#create_output_html(output_dir)
-			create_html_diff_vans(output_dir, van_type, van_type2)
+			create_html_diff_vans(output_dir, fasta1, fasta2, van_type, van_type2)
 			if not van_type == van_type2:
 				print('These two genomes are not the same van type, %s is %s and %s is %s' %(fasta1, van_type, fasta2, van_type2))
 			elif not van_type or not van_type2:
