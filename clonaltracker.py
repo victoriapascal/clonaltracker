@@ -83,59 +83,6 @@ def run_poppunk(list_genomes, poppunk_db, out_dir):
 		print(err3)
 	os.chdir(cwd)
 
-def run_tetyper(fasta, out_dir, type_pident, location_reads):
-	'''Running TETyper to assess transposon type'''
-	print('3. Running TETyper to assess transposon type')
-	sample = fasta.split('/')[-1].split('.')[0] + "_"
-	fq1 = [file for file in os.listdir(location_reads) if 'R1.fastq.gz' in file and sample in file][0]
-	fq2 = [file for file in os.listdir(location_reads) if 'R2.fastq.gz' in file and sample in file][0]
-	#fq1 = [file for file in os.listdir(location_reads) if '_R1_val_1.fq' in file and sample in file][0]
-	#fq2 = [file for file in os.listdir(location_reads) if '_R2_val_2.fq' in file and sample in file][0]
-	tnp_ref = ''
-	script_dir = os.path.abspath( os.path.dirname( __file__ ))
-	for a in type_pident.keys():
-		if "vanA" in a:
-			tnp_ref = script_dir + os.sep + 'van_representatives/tnp_db/vanA_M97297.fa'
-		else:
-			if "vanB" in a:
-				tnp_ref = script_dir + os.sep + 'van_representatives/tnp_db/vanB_AY655721.fa'
-	if not os.path.isdir(out_dir + os.sep + 'TETyper_out'):
-		os.mkdir(out_dir + os.sep + 'TETyper_out')
-	else:
-		pass
-	tet_out = out_dir + os.sep + 'TETyper_out/' + fasta.split('/')[-1].split('.')[0]
-	print(tet_out)
-	cmd = ['TETyper.py', '--ref', tnp_ref, '--assembly', fasta, '--outprefix', tet_out, '--flank_len', '5', '--fq1', location_reads + fq1, '--fq2', location_reads + fq2, ] 
-	torun = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	out, err = torun.communicate()
-	if err:
-		print(err)
-def parse_tetyper_output(output_dir):
-	'''parse TETyper output to check if both genomes have the same transposon type'''
-	snps = {}
-	names = []
-	tet_out = output_dir + os.sep + 'TETyper_out/'
-	summary = [files for files in os.listdir(tet_out) if 'summary' in files]
-	for f in summary:
-		with open(tet_out + f, 'r') as f1:
-			next(f1)
-			name = f.split('_')[0]
-			names.append(name)
-			snps[name] = []
-			for line in f1:
-				lines = line.strip().split('\t')
-				snps[name].append(lines[0])
-				snps[name].append(lines[2])
-#				snps[name].append(lines[3])
-
-	result = ''
-	if set(snps[names[0]]) == set(snps[names[1]]):
-		result = True
-	else:
-		result = False
-	
-	return result
-
 def get_contigs_seqs(output_dir,fna):
 	'''
 	From the TETyper blast output, get the transposons that align with the transposon
@@ -687,10 +634,6 @@ if __name__ == '__main__' :
 			out_blast_tnp2 = output_dir + '/blast_contigs_' + str(fasta2)
 			run_blastn(tnp_db, out_blast_tnp1, fa1)
 			run_blastn(tnp_db, out_blast_tnp2, fa2)
-			##run tetyper
-			#run_tetyper(fa1, output_dir, records1, loc_reads)
-			#run_tetyper(fa2, output_dir, records2, loc_reads)
-			#result  = parse_tetyper_output(output_dir)
 			loc_fastas = '/'.join(fa1.split('/')[:-1])
 			if loc_fastas == '':
 				loc_fastas = '.'
