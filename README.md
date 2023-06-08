@@ -41,18 +41,34 @@ conda install pp-sketchlib==1.7.4
 ```
 conda install -c bioconda isescan
 ```
+Tested with ISEScan version v2.20
 
 ```
 conda install -c bioconda ragtag
 ```
+Tested with RagTag version v2.1.0
 
 ```
 conda install -c bioconda clinker-py
 ```
+Tested with clinker version v0.0.24
 
 ```
 conda install -c bioconda mash
 ```
+Tested with Mash version 2.3
+
+```
+conda install -c conda-forge -c bioconda bakta
+```
+For a full bakta installation, you also need to download its database by typing the following command:
+
+```
+bakta_db download --output <output-path> --type [light|full]
+
+```
+Tested with Bakta version 1.5.1 and full database. Please, check their repository for more information: https://github.com/oschwengers/bakta
+
 
 ## How to run ClonaTracker
 
@@ -65,7 +81,7 @@ conda activate ct_env
 	- Fasta files should be in the same folder
 	- Path where to find both fasta files
 ```
-python clonaltracker/clonaltracker.py /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7314.fasta /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7317.fasta  
+python clonaltracker/clonaltracker.py /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7314.fasta /hpc/dla_mm/vpascalandreu/data/vanB_fastas/E7317.fasta  /path/to/bakta_db/
 ```
 
 ## Under-the-hood
