@@ -13,13 +13,19 @@ import pickle
 def check_input_is_fasta(fasta):
 	'''Checks that the input is a valid nucleotide fasta sequence'''
 	check = ''
+	format_fasta = ''
 	with open(fasta, 'r') as f:
 		lines = f.readlines()
 		if lines[0].startswith('>') and all(base.upper() in ('A', 'C', 'T', 'G', 'N') for base in lines[1].strip()) ==True:
 			check = True
+			if lines[2].startswith('>'):
+				format_fasta = True
+			else:
+				format_fasta = False
 		else:
 			check = False
-	return check
+			format_fasta = False
+	return check, format_fasta
 
 def run_blastn(db, out_f, fasta):
 	'''Run blastn on any given fatsa sequence using the van gene DB'''
@@ -101,11 +107,14 @@ def get_contigs_seqs(output_dir,fna):
 	
 	for a in sample_contigs.keys():
 		sample = [f for f in os.listdir(fna) if a + '.f' in f][0]
+		print(sample)
 		with open(fna + os.sep + sample, 'r') as f2:
 			lines = f2.readlines()
+			print(lines)
 			out = open(output_dir + os.sep + a + "_tnp_contig.fa", 'w')
 			header = ''
 			for c in sample_contigs[a]:
+				print(c)
 				header = '>' + c + '\n'
 				index = lines.index(header)
 				for entry in lines[index:index+2]:
@@ -569,6 +578,7 @@ def format_input_fasta(inf):
 		if block:
 			out.write(''.join(block) + '\n')
 
+
 def annotate_tnp_bakta(out_dir, bakta_db):
 	'''
 	Run Bakta to annotate the transposon sequences
@@ -596,12 +606,24 @@ if __name__ == '__main__' :
 	if not os.path.exists(output_dir):
 		os.makedirs(output_dir)
 	sys.stdout= open(output_dir + os.sep + 'run.logs', 'w')
-	check1 = check_input_is_fasta(fa1)
-	check2 = check_input_is_fasta(fa2)
-	if check1 == True and check2 == True: ##if both files are fasta
-		##copy files for poppunk analysis
-		copyfile(fa1, output_dir + os.sep + fasta1)
-		copyfile(fa2, output_dir + os.sep + fasta2)
+	check1, format_check1 = check_input_is_fasta(fa1)
+	check2, format_check2 = check_input_is_fasta(fa2)
+	print(check1, check2, format_check1, format_check2)
+	if check1 == True and check2 == True and (format_check1 == False or format_check2 == False):
+		if format_check1 == False:
+			format_input_fasta(fa1)
+			fa1 = '.'.join(fa1.split('.')[:-1]) + '_formatted.fa'
+			fasta1 = fa1.split('/')[-1]
+		if format_check2 == False:
+			format_input_fasta(fa2)
+			fa2 = '.'.join(fa2.split('.')[:-1]) + '_formatted.fa'
+			fasta2 = fa2.split('/')[-1]
+	check1, format_check1 = check_input_is_fasta(fa1)
+	check2, format_check2 = check_input_is_fasta(fa2)
+	if check1 == True and check2 == True and format_check1 == True and format_check2 == True: ##if both files are fasta
+		##copy files for poppunk analysisq
+		copyfile(fa1, output_dir + os.sep + fa1)
+		copyfile(fa2, output_dir + os.sep + fa2)
 		with open(output_dir + os.sep + 'list_new_genomes.txt', 'w') as list1:
 			list1.write(out1 + '\t' + fa1 + '\n')
 			list1.write(out2 + '\t' + fa2)
@@ -652,7 +674,7 @@ if __name__ == '__main__' :
 			blast_tn_out = [f for f in os.listdir(output_dir) if 'blastn_tnp_' in f]
 			for b in blast_tn_out:
 				contig_fa = output_dir + os.sep + b.replace("blastn_tnp_", '').replace('.fna', '').replace('.fasta', '').replace('.fa', '') + '_tnp_contig.fa'
-				out_fa = output_dir + os.sep + b.replace('blastn_tnp_', '').replace('.fna', '').replace('.fasta', '').replace('fa', '') + '_tnp_trimmed.fa'
+				out_fa = output_dir + os.sep + b.replace('blastn_tnp_', '').replace('.fna', '').replace('.fasta', '').replace('.fa', '') + '_tnp_trimmed.fa'
 				trim_tnp_region(output_dir + os.sep + b, contig_fa, out_fa)
 			makeblastdb(output_dir)
 			tnp_ref_db = output_dir + os.sep + [file.replace('_tnp_contig.fa', '') for file in os.listdir(output_dir) if '_tnp_contig.fa' in file][0] + '_tnp_trimmed.fa'
